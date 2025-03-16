@@ -1,8 +1,7 @@
-import express from "npm:express"
+import { Hono } from "hono"
 
-const app = express();
-const PORT = 8000
+const app = new Hono()
 
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`)
-})
+app.get('/', (c) => c.text('Hello Deno!'))
+
+Deno.serve(app.fetch)
