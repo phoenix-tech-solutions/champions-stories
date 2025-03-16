@@ -1,7 +1,27 @@
-import { Hono } from "hono"
+import express from "express";
+import { createClient } from "supabase";
 
-const app = new Hono()
+const supabase = createClient('https://txsrwrrbnlbjmjcrbevh.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4c3J3cnJibmxiam1qY3JiZXZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxNDA1ODQsImV4cCI6MjA1NzcxNjU4NH0.mWoQRHJDPYkXwnDRm2IAR199ebYtD5P4sb37QOzgJG8');
 
-app.get('/', (c) => c.text('Hello Deno!'))
+const app = express();
 
-Deno.serve(app.fetch)
+app.post('/story', async (req, res) => {
+    const { NAME, MESSAGE } = req.body.message;
+
+    const { error } = await supabase
+        .from('stories')
+        .insert({ name: NAME, message: MESSAGE });
+
+    if (error) {console.log(error)}
+})
+
+app.get("/story2", async (req, res) => {
+
+    const { error } = await supabase
+        .from('stories')
+        .select()
+    
+    if (error) {console.log(error)}
+})
+
+app.listen(8081)
