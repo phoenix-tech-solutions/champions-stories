@@ -15,13 +15,13 @@ app.post('/story', async (req, res) => {
     if (error) {console.log(error)}
 })
 
-app.get("/story2", async (req, res) => {
+app.get("/story", async (req, res) => {
 
-    const { error } = await supabase
+    const { data, error } = await supabase
         .from('stories')
-        .select()
+        .select("*");
     
-    if (error) {console.log(error)}
+    res.send(data)
 })
 
 app.listen(8081)
