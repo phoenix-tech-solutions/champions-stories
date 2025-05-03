@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Header from "@app/components/header/Header.tsx";
 import { getStory } from "@app/utils/supabase.ts";
@@ -12,6 +12,12 @@ export default function Story() {
   const navigate = useNavigate();
   const [story, setStory] = useState<Story | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
+  
+  // Refs for animated elements
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const contentRef = useRef<HTMLParagraphElement>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const fetchStory = async () => {
@@ -32,42 +38,104 @@ export default function Story() {
         navigate("/story");
       } finally {
         setLoading(false);
+        
+        // Short delay to ensure DOM is ready before starting animations
+        setTimeout(() => {
+          setIsPageLoaded(true);
+        }, 100);
       }
     };
 
     fetchStory();
   }, [selectedStorySlug, navigate]);
 
+  // Setup intersection observer for scroll animations
+  useEffect(() => {
+    if (!loading && story) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('opacity-100', 'translate-y-0');
+              entry.target.classList.remove('opacity-0', 'translate-y-8');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+      );
+      
+      // Observe elements
+      if (titleRef.current) observer.observe(titleRef.current);
+      if (contentRef.current) observer.observe(contentRef.current);
+      if (buttonRef.current) observer.observe(buttonRef.current);
+      
+      return () => {
+        if (titleRef.current) observer.unobserve(titleRef.current);
+        if (contentRef.current) observer.unobserve(contentRef.current);
+        if (buttonRef.current) observer.unobserve(buttonRef.current);
+      };
+    }
+  }, [loading, story]);
+
+  // Enhanced loading state with animation
   if (loading || !story) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#F45151] text-white">
-        <p>Loading story...</p>
+        <div className="flex flex-col items-center">
+          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mb-4"></div>
+          <p className="text-xl animate-pulse">Loading story...</p>
+        </div>
       </div>
     );
   }
 
   return (
     <>
-    <Header />
-    <div className="min-h-screen bg-white">
-      {/* Story Content Section */}
-      <section className="py-20 px-4">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-[#F45151] mb-8">
-            {story.title}
-          </h2>
-          <p className="text-lg text-gray-600 leading-relaxed mb-12">
-            {story.body}
-          </p>
-          <Button
-            className="bg-[#F45151] hover:bg-[#d14343] text-white px-8 py-4"
-            onClick={() => navigate("/story")}
-          >
-            Back to Stories
-          </Button>
-        </div>
-      </section>
-    </div>
+      {/* Page load overlay animation */}
+      <div className={`fixed inset-0 bg-[#F45151] z-50 transition-opacity duration-700 ${isPageLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}></div>
+      
+      <Header />
+      <div className={`min-h-screen bg-white transition-opacity duration-700 ${isPageLoaded ? 'opacity-100' : 'opacity-0'}`}>
+        {/* Story Content Section */}
+        <section className="py-20 px-4">
+          <div className="max-w-4xl mx-auto">
+            <h2 
+              ref={titleRef}
+              className="text-4xl font-bold text-[#F45151] mb-8 opacity-0 translate-y-8 transition-all duration-700"
+            >
+              {story.title}
+            </h2>
+            
+            <div className="mb-4 opacity-0 translate-y-8 transition-all duration-700 delay-100">
+              <p className="text-gray-600 italic mb-6">By {story.author}</p>
+            </div>
+            
+            <p 
+              ref={contentRef}
+              className="text-lg text-gray-600 leading-relaxed mb-12 opacity-0 translate-y-8 transition-all duration-700 delay-200"
+            >
+              {story.body}
+            </p>
+            
+            <div 
+              ref={buttonRef}
+              className="opacity-0 translate-y-8 transition-all duration-700 delay-300"
+            >
+              <Button
+                className="bg-[#F45151] hover:bg-[#d14343] text-white px-8 py-4 transition-all duration-300 hover:shadow-lg transform hover:scale-105"
+                onClick={() => {
+                  document.body.classList.add('opacity-0');
+                  setTimeout(() => navigate("/story"), 300);
+                  document.body.classList.remove('opacity-0');
+                }}
+              >
+                Back to Stories
+              </Button>
+            </div>
+          </div>
+        </section>
+      </div>
     </>
   );
 }

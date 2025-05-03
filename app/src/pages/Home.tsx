@@ -32,60 +32,104 @@ const titleStyles: React.CSSProperties[] = [
 
 export default function Home() {
   const storiesSectionRef = useRef<HTMLElement>(null);
+  const aboutSectionRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const viewAllButtonRef = useRef<HTMLDivElement>(null);
   const [imageOpacity, setImageOpacity] = useState(0.7);
   const [isStoriesVisible, setIsStoriesVisible] = useState(false);
+  const [isAboutVisible, setIsAboutVisible] = useState(false);
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
   const navigate = useNavigate();
 
   const handleCardClick = (story: Story) => {
-    navigate(`/story/${story.slug}`);
+    // Add a small fade-out effect before navigation
+    document.body.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+    setTimeout(() => {
+      navigate(`/story/${story.slug}`);
+    }, 300);
+  };
+
+  const handleViewAllClick = () => {
+    // Add a small fade-out effect before navigation
+    document.body.classList.add('opacity-0', 'transition-opacity', 'duration-300');
+    setTimeout(() => {
+      navigate('/story');
+    }, 300);
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = globalThis.scrollY;
-      const viewportHeight = globalThis.innerHeight;
+    setIsPageLoaded(true);
+    
+    // Reset any previous navigation fade-out effect
+    document.body.classList.remove('opacity-0');
+    document.body.classList.add('opacity-100');
+  }, []);
 
-      if (scrollY > viewportHeight) {
-        return;
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const viewportHeight = window.innerHeight;
+
+      if (scrollY <= viewportHeight) {
+        const startingOpacity = 0.7;
+        const opacity = startingOpacity - Math.min(scrollY / viewportHeight, startingOpacity);
+        setImageOpacity(opacity);
       }
 
-      const startingOpacity = 0.7;
-      const opacity = startingOpacity -
-        Math.min(scrollY / viewportHeight, startingOpacity);
-      setImageOpacity(opacity);
+      if (aboutSectionRef.current) {
+        const rect = aboutSectionRef.current.getBoundingClientRect();
+        setIsAboutVisible(rect.top <= window.innerHeight * 0.75);
+      }
 
       if (storiesSectionRef.current) {
         const rect = storiesSectionRef.current.getBoundingClientRect();
-        setIsStoriesVisible(rect.top <= globalThis.innerHeight * 0.75);
+        setIsStoriesVisible(rect.top <= window.innerHeight * 0.75);
+      }
+
+      cardRefs.current.forEach((cardRef, index) => {
+        if (cardRef) {
+          const rect = cardRef.getBoundingClientRect();
+          const isVisible = rect.top <= window.innerHeight * 0.85;
+          if (isVisible) {
+            cardRef.classList.add('opacity-100', 'translate-y-0');
+            cardRef.classList.remove('opacity-0', 'translate-y-8');
+          }
+        }
+      });
+
+      // Check "View All" button visibility
+      if (viewAllButtonRef.current) {
+        const rect = viewAllButtonRef.current.getBoundingClientRect();
+        const isVisible = rect.top <= window.innerHeight * 0.9;
+        if (isVisible) {
+          viewAllButtonRef.current.classList.add('opacity-100', 'translate-y-0');
+          viewAllButtonRef.current.classList.remove('opacity-0', 'translate-y-8');
+        }
       }
     };
 
-    globalThis.addEventListener("scroll", handleScroll);
-    return () => globalThis.removeEventListener("scroll", handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const [currentTitleStyle, setCurrentTitleStyle] = useState(titleStyles[0]);
-
   const [currentTitle, setCurrentTile] = useState(titleVariations[0]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentTile((prevTitle) => {
-        const currentIndex = titleVariations.findIndex((title) =>
-          title === prevTitle
-        );
+        const currentIndex = titleVariations.findIndex((title) => title === prevTitle);
         const nextIndex = (currentIndex + 1) % titleVariations.length;
         return titleVariations[nextIndex];
       });
 
       setCurrentTitleStyle((prevStyle) => {
-        const currentIndex = titleStyles.findIndex((style) =>
-          style === prevStyle
-        );
+        const currentIndex = titleStyles.findIndex((style) => style === prevStyle);
         const nextIndex = (currentIndex + 1) % titleStyles.length;
         return titleStyles[nextIndex];
       });
-    }, 1000); // Change title every 3 seconds
+    }, 1000);
     return () => clearInterval(interval);
   }, []);
 
@@ -101,10 +145,8 @@ export default function Home() {
 
         const thumbnailPromises = stories
           .filter((story) => story.thumbnail !== null)
-          .map((story) => 
-            getStoryThumbnail(story)
-          );
-        
+          .map((story) => getStoryThumbnail(story));
+
         Promise.all(thumbnailPromises).then((thumbnails) => {
           setThumbnails(thumbnails.filter((thumbnail) => thumbnail !== null && thumbnail !== undefined));
         });
@@ -122,10 +164,17 @@ export default function Home() {
     setShowThumbnails(true);
   }, []);
 
+  useEffect(() => {
+    cardRefs.current = cardRefs.current.slice(0, stories.length);
+  }, [stories]);
+
   return (
     <div className="scroll-smooth">
+      {/* Page load overlay */}
+      <div className={`fixed inset-0 bg-[#F45151] z-50 transition-opacity duration-1000 ${isPageLoaded ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}></div>
+
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section className={`relative min-h-screen flex items-center justify-center overflow-hidden transition-opacity duration-1000 ${isPageLoaded ? 'opacity-100' : 'opacity-0'}`}>
         <div className="absolute inset-0 bg-[#F45151]">
           <div
             className="absolute inset-0 bg-cover bg-center bg-[url(/home.jpg)] transition-opacity duration-500"
@@ -133,53 +182,83 @@ export default function Home() {
           />
         </div>
 
-        <div className="relative z-10 text-center px-4">
-          <h1 className="text-6xl md:text-8xl font-bold text-white mb-8 animate-fade-in-up">
+        <div className="relative z-10 text-center px-4 transition-all duration-1000 transform">
+          <h1 className={`text-6xl md:text-8xl font-bold text-white mb-8 transition-transform duration-1000 ${isPageLoaded ? 'translate-y-0 opacity-100' : 'translate-y-16 opacity-0'}`}>
             Stories of{" "}
             <span style={{ ...currentTitleStyle }}>
               {currentTitle}
             </span>
           </h1>
         </div>
-        <div className="absolute bottom-8 animate-bounce flex justify-center w-full">
-          <img src={Arrow} className="w-12 h-12" alt="Scroll down" />
+        <div className={`absolute bottom-8 flex justify-center w-full transition-all duration-1000 delay-500 ${isPageLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+          <img src={Arrow} className="w-12 h-12 animate-bounce" alt="Scroll down" />
         </div>
       </section>
 
-      <AboutSection />
+      {/* About Section */}
+      <div ref={aboutSectionRef} className="w-full">
+        <div className={`transition-all duration-1000 transform ${isAboutVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}>
+          <AboutSection />
+        </div>
+      </div>
 
       {/* Stories Section */}
-      <section
-        ref={storiesSectionRef}
-        className=" bg-white px-4"
-      >
+      <section ref={storiesSectionRef} className="bg-white px-4 pt-16">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-[#F45151] mb-16 text-center">
+          <h2 className={`text-4xl font-bold text-[#F45151] mb-16 text-center transition-all duration-1000 transform ${isStoriesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}>
             Recent Stories
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
             {stories.length > 0 ? (
               stories.map((story, index) => (
-                <Card
-                  key={index}
-                  story={story}
-                  thumbnail={thumbnails[index]?.url || ""}
-                  champion={champions[index]}
-                  handleCardClick={handleCardClick}
-                />
+                <div 
+                  key={index} 
+                  ref={el => cardRefs.current[index] = el}
+                  className="opacity-0 translate-y-8 transition-all duration-700 delay-100"
+                  style={{ transitionDelay: `${150 * (index % 3)}ms` }}
+                >
+                  <Card
+                    story={story}
+                    thumbnail={thumbnails[index]?.url || ""}
+                    champion={champions[index]}
+                    handleCardClick={handleCardClick}
+                  />
+                </div>
               ))
             ) : (
-              <p>Sorry. Nothing here!</p>
+              <p className={`transition-all duration-1000 ${isStoriesVisible ? 'opacity-100' : 'opacity-0'}`}>Sorry. Nothing here!</p>
             )}
+          </div>
+          
+          {/* View All Stories Button */}
+          <div 
+            ref={viewAllButtonRef}
+            className="mt-16 mb-8 flex justify-center opacity-0 translate-y-8 transition-all duration-700 delay-300"
+          >
+            <Button
+              className="bg-[#F45151] hover:bg-[#d14343] text-white text-lg px-12 py-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
+              onClick={handleViewAllClick}
+            >
+              View All Stories
+            </Button>
           </div>
         </div>
       </section>
 
       {/* Footer Section */}
-      <footer className="bg-gray-800 text-white py-8">
+      <footer className="bg-gray-800 text-white py-8 mt-24">
         <div className="max-w-6xl mx-auto text-center">
           <p className="text-sm">
-            © {new Date().getFullYear()} Element 6 (?). All rights reserved.
+        © {new Date().getFullYear()} Element 6. All rights reserved.
+        Website developed by{" "}
+        <a
+          href="https://www.linkedin.com/company/phoenixtechsolutions/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-bold text-[#F45151] hover:underline"
+        >
+          Phoenix Tech Solutions
+        </a>.
           </p>
         </div>
       </footer>
@@ -190,7 +269,7 @@ export default function Home() {
 interface CardProps {
   champion: Champion;
   story: Story;
-  thumbnail: string; // string URL
+  thumbnail: string;
   handleCardClick: (story: Story) => void;
 }
 
@@ -200,7 +279,7 @@ function Card({ champion, story, thumbnail, handleCardClick }: CardProps) {
     return null;
   }
   return (
-    <div className="bg-white rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300 overflow-hidden">
+    <div className="bg-white rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300 overflow-hidden h-full">
       <div className="relative group overflow-hidden rounded-lg">
         <img
           src={thumbnail}
