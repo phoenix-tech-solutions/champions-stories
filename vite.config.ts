@@ -9,18 +9,22 @@ export default ({ mode }: UserConfig) => {
 
     return {
         root: "./app",
+        server: {
+            port: 3000
+        },
         plugins: [
             react(),
             deno(),
             tailwindcss(),
         ],
         optimizeDeps: {
-            include: ["react/jsx-runtime"],
+            include: ["react/jsx-runtime", "react/jsx-dev-runtime"],
         },
         resolve: {
             alias: {
                 "@": new URL("./src/", import.meta.url).pathname,
             },
+            dedupe: ['react','react-dom'],
         },
     };
 };

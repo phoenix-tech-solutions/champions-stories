@@ -280,6 +280,24 @@ export default function Home() {
                         Be part of the journey. Share your stories, connect with
                         others, and inspire the world.
                     </p>
+
+                    {/* Video Embed */}
+                    <div className="mx-auto mb-8 max-w-3xl">
+                        <div
+                            className="relative"
+                            style={{ paddingTop: "56.25%" /* 16:9 */ }}
+                        >
+                            <iframe
+                                className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
+                                src="https://www.youtube.com/embed/beWuHwDkN1U"
+                                title="Champions Community Foundation"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            />
+                        </div>
+                    </div>
+
                     <Button asChild>
                         <a
                             href="https://www.championscommunityfoundation.org/champions-place"
@@ -368,8 +386,8 @@ interface CardProps {
 }
 
 function Card({ story, thumbnail, handleCardClick }: CardProps) {
-    if (!story) {
-        return;
+    if (!story || !thumbnail) {
+        return null;
     }
     return (
         <div className="bg-white rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300 overflow-hidden h-full">
