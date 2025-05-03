@@ -13,25 +13,25 @@ export default function Header() {
                 {/* Navigation */}
                 <nav className="hidden md:flex space-x-6">
                     <Link
+                        to="/"
+                        className="hover:text-white/80 transition-colors"
+                    >
+                        Home
+                    </Link>
+                    <Link
                         to="/story"
                         className="hover:text-white/80 transition-colors"
                     >
                         Stories
                     </Link>
                     <Link
-                        to="/champions"
-                        className="hover:text-white/80 transition-colors"
-                    >
-                        Champions
-                    </Link>
-                    <Link
-                        to="/about"
+                        to="/#about"
                         className="hover:text-white/80 transition-colors"
                     >
                         About
                     </Link>
                     <Link
-                        to="/contact"
+                        to="/#contact"
                         className="hover:text-white/80 transition-colors"
                     >
                         Contact
