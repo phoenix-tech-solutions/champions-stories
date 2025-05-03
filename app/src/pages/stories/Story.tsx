@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import Header from "@app/components/header/Header.tsx";
 import { getPublicUrl, getStory } from "@app/utils/supabase.ts";
 import { Database } from "../../../../supabase.types.ts";
 import { Button } from "@app/components/ui/button.tsx";
+import Footer from "@app/components/Footer.tsx";
 
 type Story = Database["public"]["Tables"]["stories"]["Row"];
 
@@ -16,6 +17,7 @@ export default function Story() {
 
   // Refs for animated elements
   const titleRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLHeadingElement>(null);
   const contentRef = useRef<HTMLParagraphElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
 
@@ -67,11 +69,13 @@ export default function Story() {
 
       // Observe elements
       if (titleRef.current) observer.observe(titleRef.current);
+      if (subtitleRef.current) observer.observe(subtitleRef.current);
       if (contentRef.current) observer.observe(contentRef.current);
       if (buttonRef.current) observer.observe(buttonRef.current);
 
       return () => {
         if (titleRef.current) observer.unobserve(titleRef.current);
+        if (subtitleRef.current) observer.unobserve(subtitleRef.current);
         if (contentRef.current) observer.unobserve(contentRef.current);
         if (buttonRef.current) observer.unobserve(buttonRef.current);
       };
@@ -107,19 +111,32 @@ export default function Story() {
           isPageLoaded ? "opacity-100" : "opacity-0"
         }`}
       >
+        <div className="p-4">
+          <Link
+            to="/story"
+            className="inline-flex text-black items-center px-4 py-2 bg-transparent border rounded hover:border-[#d14343] hover:underline transition-all duration-100"
+          >
+            ← Back
+          </Link>
+        </div>
         {/* Story Content Section */}
         <section className="py-20 px-4">
           <div className="max-w-4xl mx-auto">
             <h2
               ref={titleRef}
-              className="text-4xl font-bold text-[#F45151] mb-8 opacity-0 translate-y-8 transition-all duration-700"
+              className="text-4xl font-bold text-[#F45151] mb-2 opacity-0 translate-y-8 transition-all duration-700"
             >
               {story.title}
             </h2>
+            <h3
+              ref={subtitleRef}
+              className="font-bold mb-2 opacity-0 translate-y-8 transition-all duration-700 mb-4"
+            >
+              {story.subtitle}
+            </h3>
 
-            <div className="mb-4 opacity-0 translate-y-8 transition-all duration-700 delay-100">
-              <p className="text-gray-600 italic mb-6">By {story.author}</p>
-            </div>
+
+            <h3 className="text-gray-600 italic mb-20">By {story.author}</h3>
 
             <p
               ref={contentRef}
@@ -127,14 +144,14 @@ export default function Story() {
             >
               {
                 /*
-    1) First split into box vs. non‑box segments
-    2) Map over each segment: if it matches [img-box|...|img-box], render as grid
-       otherwise, fall back to existing {{image:X}} replacement logic
-  */
+                  1) First split into box vs. non‑box segments
+                  2) Map over each segment: if it matches [img-box|...|img-box], render as grid
+                    otherwise, fall back to existing {{image:N}} replacement logic
+                */
               }
               {story.body
                 .split(/(\[img-box\|[\s\S]+?\|img-box\])/g)
-                .map(segment => {
+                .map((segment) => {
                   // Detect a full [img-box|...|img-box] block
                   const boxMatch = segment.match(
                     /^\[img-box\|([\s\S]+?)\|img-box\]$/,
@@ -187,19 +204,21 @@ export default function Story() {
               className="opacity-0 translate-y-8 transition-all duration-700 delay-300"
             >
               <Button
-                className="bg-[#F45151] hover:bg-[#d14343] text-white px-8 py-4 transition-all duration-300 hover:shadow-lg transform hover:scale-105"
+                className="bg-[#F45151] hover:bg-[#d14343] w-full text-white px-8 py-4 hover:shadow-lg transform hover:scale-105 !duration-300 !transition-all"
                 onClick={() => {
                   document.body.classList.add("opacity-0");
                   setTimeout(() => navigate("/story"), 300);
                   document.body.classList.remove("opacity-0");
                 }}
               >
-                Back to Stories
+                Back to All Stories
               </Button>
             </div>
           </div>
         </section>
       </div>
+
+      <Footer />
     </>
   );
 }

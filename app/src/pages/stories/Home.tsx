@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getStory, getRecentStories, getStoryThumbnail } from "../../utils/supabase.ts";
 import type { Database } from "../../../../supabase.types.ts";
 import Header from "../../components/header/Header.tsx";
+import Footer from "@app/components/Footer.tsx";
 
 type Story = Database["public"]["Tables"]["stories"]["Row"];
 type Thumbnail = {
@@ -156,6 +157,8 @@ export default function Home() {
                     </div>
                 </section>
             </div>
+
+            <Footer />
         </>
     );
 }

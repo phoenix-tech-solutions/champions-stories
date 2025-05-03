@@ -65,6 +65,11 @@ export async function getStoryThumbnail(story: Story) {
   
   const image = images.filter((image) => image.id === story.thumbnail);
 
+  if (image.length === 0) {
+    console.error("No thumbnail found for story:", story.title);
+    return;
+  }
+
   const { data: { publicUrl } } = supabase
     .storage
     .from("stories")
