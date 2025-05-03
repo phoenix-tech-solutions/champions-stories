@@ -9,18 +9,6 @@ export default ({ mode }: UserConfig) => {
 
     return {
         root: "./app",
-        server: {
-            port: 3000,
-
-            // `/api` is a resource endpoint, not a directory
-            // corresponds to the `server` directory
-            proxy: {
-                "/api": {
-                    target: "http://localhost:8000",
-                    changeOrigin: true,
-                },
-            },
-        },
         plugins: [
             react(),
             deno(),
