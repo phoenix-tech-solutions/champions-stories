@@ -21,6 +21,15 @@ type Thumbnail = {
   url: string;
 }
 
+export function getPublicUrl(path: string) {
+  const { data: { publicUrl } } = supabase
+    .storage
+    .from("stories")
+    .getPublicUrl(path);
+
+  return publicUrl;
+}
+
 export async function getStory(storySlug: string) {
   const query = supabase
     .from("stories")

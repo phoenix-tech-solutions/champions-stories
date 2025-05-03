@@ -31,7 +31,7 @@ export default function Home() {
     useEffect(() => {
         const fetchStories = async () => {
             try {
-                const fetchedStories = await getRecentStories(6);
+                const fetchedStories = await getRecentStories(100);
                 setStories(fetchedStories);
 
                 const thumbnailPromises = fetchedStories

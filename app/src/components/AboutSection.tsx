@@ -1,23 +1,23 @@
 export default function AboutSection() {
   return (
-    <section className="relative bg-gradient-to-r from-[#F45151] to-[#d52a2a] py-24 px-6 overflow-hidden">
+    <section className="relative bg-white py-24 px-6 overflow-hidden">
       <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('/pattern.svg')] bg-repeat z-0" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Centered Heading */}
-        <h2 className="text-5xl md:text-6xl font-extrabold text-white text-center mb-12 drop-shadow-lg animate-fadeIn">
+        <h2 className="text-5xl md:text-6xl font-extrabold text-black text-center mb-12 drop-shadow-lg animate-fadeIn">
           About Champions Place
         </h2>
 
         {/* Divider */}
         <div className="flex justify-center mb-12">
-          <div className="w-24 h-1 bg-white rounded-full animate-pulse" />
+          <div className="w-24 h-1 bg-black rounded-full animate-pulse" />
         </div>
 
         {/* Two Column Layout */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
           {/* Text Column */}
-          <div className="text-white space-y-6 text-lg leading-relaxed animate-slideInLeft">
+          <div className="text-black space-y-6 text-lg leading-relaxed animate-slideInLeft">
             <p>
               Champions Place is a groundbreaking residential facility designed for
               adults with disabilities. Through cutting-edge adaptive technology,
@@ -36,8 +36,8 @@ export default function AboutSection() {
               Your support helps fund another wheelchair — and fuels another dream.
             </p>
 
-            <div className="flex items-center gap-3 pt-4 text-white font-semibold">
-              <span className="text-2xl animate-pulse">🤍</span>
+            <div className="flex items-center gap-3 pt-4 text-black font-semibold">
+              <span className="text-2xl animate-pulse">♥️</span>
               <span>Support. Empower. Inspire.</span>
             </div>
           </div>
@@ -47,9 +47,8 @@ export default function AboutSection() {
             <div className="w-full aspect-video">
               <iframe
                 className="w-full h-full"
-                src="https://www.youtube.com/embed/oAijzT0LCv8?start=241"
+                src="https://www.youtube.com/embed/oAijzT0LCv8"
                 title="Champions Place Video"
-                frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>

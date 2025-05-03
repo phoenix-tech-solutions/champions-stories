@@ -202,6 +202,21 @@ export default function Home() {
         </div>
       </div>
 
+      {/* CTA Section */}
+      <section className="bg-[#F45151] text-white py-16 px-4">
+        <div className="max-w-6xl mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-8">Join the Community</h2>
+          <p className="text-lg mb-8">
+            Be part of the journey. Share your stories, connect with others, and inspire the world.
+          </p>
+          <Button asChild>
+            <a href="https://www.championscommunityfoundation.org/champions-place" className="text-black hover:bg-gray-200 text-lg px-12 py-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+              Champions Place
+            </a>
+          </Button>
+        </div>
+      </section>
+
       {/* Stories Section */}
       <section ref={storiesSectionRef} className="bg-white px-4 pt-16">
         <div className="max-w-6xl mx-auto">
@@ -220,7 +235,6 @@ export default function Home() {
                   <Card
                     story={story}
                     thumbnail={thumbnails[index]?.url || ""}
-                    champion={champions[index]}
                     handleCardClick={handleCardClick}
                   />
                 </div>
@@ -267,41 +281,40 @@ export default function Home() {
 }
 
 interface CardProps {
-  champion: Champion;
   story: Story;
   thumbnail: string;
   handleCardClick: (story: Story) => void;
 }
 
-function Card({ champion, story, thumbnail, handleCardClick }: CardProps) {
-  if (!champion) {
-    console.error("Champion not found", story);
-    return null;
+function Card({ story, thumbnail, handleCardClick }: CardProps) {
+  if (!story) {
+    return;
   }
   return (
     <div className="bg-white rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300 overflow-hidden h-full">
       <div className="relative group overflow-hidden rounded-lg">
         <img
           src={thumbnail}
-          alt={champion.name}
+          alt={story.title}
           className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#F45151]/90 to-transparent flex items-end p-6">
           <div>
-            <h3 className="text-2xl font-bold text-white">{champion.name}</h3>
-            <p className="text-white/90">{champion.sport}</p>
+            <h3 className="text-2xl font-bold text-white">{story.title}</h3>
+            <p className="text-white/90">{story.subtitle}</p>
           </div>
         </div>
       </div>
       <div className="p-6">
-        <p className="text-gray-600 mb-4">{champion.description}</p>
+        <p className="text-gray-600 mb-4">By {story.author}</p>
 
-        <Button
-          className="bg-[#F45151] hover:bg-[#d14343] w-full"
+        <button
+          type="button"
+          className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-4 py-2 shadow-sm text-white hover:bg-[#d14343] w-full border-2 border-[#F45151] hover:border-[#F45151] transition-all"
           onClick={handleCardClick.bind(null, story)}
         >
           Read Full Story
-        </Button>
+        </button>
       </div>
     </div>
   );
