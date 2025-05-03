@@ -1,48 +1,48 @@
 {
-  "tasks": {
-    "dev": "deno run -A --node-modules-dir=auto npm:vite & deno run server:start",
-    "build": "deno run -A --node-modules-dir=auto npm:vite build",
-    "server:start": "deno run -A --node-modules-dir --watch ./server/main.ts",
-    "serve": "deno task build && deno task server:start"
-  },
-  "imports": {
-    "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.4",
-    "@radix-ui/react-slot": "npm:@radix-ui/react-slot@^1.2.0",
-    "@supabase/supabase-js": "jsr:@supabase/supabase-js@^2.49.4",
-    "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.3",
-    "@types/react": "npm:@types/react@^18.3.12",
-    "@vitejs/plugin-react": "npm:@vitejs/plugin-react@^4.3.3",
-    "autoprefixer": "npm:autoprefixer@^10.4.21",
-    "class-variance-authority": "npm:class-variance-authority@^0.7.1",
-    "clsx": "npm:clsx@^2.1.1",
-    "express": "npm:express@^4.21.2",
-    "hono": "npm:hono@^4.7.4",
-    "lucide-react": "npm:lucide-react@^0.487.0",
-    "react": "npm:react@^18.3.1",
-    "react-dom": "npm:react-dom@^18.3.1",
-    "react-router-dom": "npm:react-router-dom@^7.1.1",
-    "tailwind-merge": "npm:tailwind-merge@^3.2.0",
-    "tailwindcss": "npm:tailwindcss@^4.1.3",
-    "tw-animate-css": "npm:tw-animate-css@^1.2.5",
-    "vite": "npm:vite@^5.4.11",
-    "@app/": "./app/src/"
-  },
-  "nodeModulesDir": "auto",
-  "compilerOptions": {
-    "types": [
-      "react",
-      "react-dom",
-      "@types/react"
-    ],
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "deno.ns"
-    ],
-    "jsx": "react-jsx",
-    "jsxImportSource": "react"
-  },
-  "fmt": {
-    "indentWidth": 2
-  }
+    "tasks": {
+        "dev": "deno run -A --node-modules-dir=auto npm:vite & deno run server:start",
+        "build": "deno run -A --node-modules-dir=auto npm:vite build",
+        "server:start": "deno run -A --node-modules-dir --watch ./server/main.ts",
+        "serve": "deno task build && deno task server:start"
+    },
+    "imports": {
+        "@deno/vite-plugin": "npm:@deno/vite-plugin@^1.0.4",
+        "@radix-ui/react-slot": "npm:@radix-ui/react-slot@^1.2.0",
+        "@supabase/supabase-js": "jsr:@supabase/supabase-js@^2.49.4",
+        "@tailwindcss/vite": "npm:@tailwindcss/vite@^4.1.3",
+        "@types/react": "npm:@types/react@^18.3.12",
+        "@vitejs/plugin-react": "npm:@vitejs/plugin-react@^4.3.3",
+        "autoprefixer": "npm:autoprefixer@^10.4.21",
+        "class-variance-authority": "npm:class-variance-authority@^0.7.1",
+        "clsx": "npm:clsx@^2.1.1",
+        "express": "npm:express@^4.21.2",
+        "hono": "npm:hono@^4.7.4",
+        "lucide-react": "npm:lucide-react@^0.487.0",
+        "react": "npm:react@^18.3.1",
+        "react-dom": "npm:react-dom@^18.3.1",
+        "react-router-dom": "npm:react-router-dom@^7.1.1",
+        "tailwind-merge": "npm:tailwind-merge@^3.2.0",
+        "tailwindcss": "npm:tailwindcss@^4.1.3",
+        "tw-animate-css": "npm:tw-animate-css@^1.2.5",
+        "vite": "npm:vite@^5.4.11",
+        "@app/": "./app/src/"
+    },
+    "nodeModulesDir": "auto",
+    "compilerOptions": {
+        "types": [
+            "react",
+            "react-dom",
+            "@types/react"
+        ],
+        "lib": [
+            "dom",
+            "dom.iterable",
+            "deno.ns"
+        ],
+        "jsx": "react-jsx",
+        "jsxImportSource": "react"
+    },
+    "fmt": {
+        "indentWidth": 4
+    }
 }
