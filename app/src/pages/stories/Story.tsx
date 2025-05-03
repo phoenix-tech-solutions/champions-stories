@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
+import Header from "@app/components/header/Header.tsx";
 import { getStory } from "@app/utils/supabase.ts";
 import { Database } from "../../../../supabase.types.ts";
 import { Button } from "@app/components/ui/button.tsx";
@@ -16,20 +16,20 @@ export default function Story() {
   useEffect(() => {
     const fetchStory = async () => {
       if (!selectedStorySlug) {
-        navigate("/stories");
+        navigate("/story");
         return;
       }
 
       try {
         const fetchedStory = await getStory(selectedStorySlug);
         if (!fetchedStory) {
-          navigate("/stories");
+          navigate("/story");
           return;
         }
         setStory(fetchedStory);
       } catch (error) {
         console.error("Error fetching story:", error);
-        navigate("/stories");
+        navigate("/story");
       } finally {
         setLoading(false);
       }
@@ -38,7 +38,7 @@ export default function Story() {
     fetchStory();
   }, [selectedStorySlug, navigate]);
 
-  if (loading) {
+  if (loading || !story) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#F45151] text-white">
         <p>Loading story...</p>
@@ -46,33 +46,10 @@ export default function Story() {
     );
   }
 
-  if (!story) {
-    return null;
-  }
-
   return (
+    <>
+    <Header />
     <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden">
-        {
-          /* <div className="absolute inset-0 bg-[#F45151]">
-                    <div
-                        className="absolute inset-0 bg-cover bg-center"
-                        style={{ backgroundImage: `url(${story.image_url})` }}
-                    />
-                </div> */
-        }
-        <div className="relative z-10 text-center px-4">
-          <h1 className="text-5xl md:text-7xl font-bold text-white mb-4">
-            {story.body}
-          </h1>
-
-          {story.subtitle && (
-            <p className="text-xl text-white/90">{story.subtitle}</p>
-          )}
-        </div>
-      </section>
-
       {/* Story Content Section */}
       <section className="py-20 px-4">
         <div className="max-w-4xl mx-auto">
@@ -84,12 +61,13 @@ export default function Story() {
           </p>
           <Button
             className="bg-[#F45151] hover:bg-[#d14343] text-white px-8 py-4"
-            onClick={() => navigate("/stories")}
+            onClick={() => navigate("/story")}
           >
             Back to Stories
           </Button>
         </div>
       </section>
     </div>
+    </>
   );
 }
