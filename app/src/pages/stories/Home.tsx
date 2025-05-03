@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
+getPublicUrl,
     getRecentStories,
     getStory,
-    getStoryThumbnail,
 } from "../../utils/supabase.ts";
 import type { Database } from "../../../../supabase.types.ts";
 import Header from "../../components/header/Header.tsx";
@@ -39,17 +39,12 @@ export default function Home() {
                 const fetchedStories = await getRecentStories(100);
                 setStories(fetchedStories);
 
-                const thumbnailPromises = fetchedStories
-                    .filter((story) => story.thumbnail !== null)
-                    .map((story) => getStoryThumbnail(story));
+                const thumbnails = fetchedStories
+                    .filter(story => story.thumbnail !== null)
+                    .map(story => ({ url: getPublicUrl(`thumbnails/${story.slug}`) }));
+                
+                setThumbnails(thumbnails);
 
-                Promise.all(thumbnailPromises).then((thumbnails) => {
-                    setThumbnails(
-                        thumbnails.filter((thumbnail) =>
-                            thumbnail !== null && thumbnail !== undefined
-                        ),
-                    );
-                });
             } catch (error) {
                 console.error("Error fetching stories:", error);
             } finally {

@@ -5,3 +5,6 @@ deno.lock
 
 # Secret
 .env
+
+# MacOS stuff
+.DS_Store

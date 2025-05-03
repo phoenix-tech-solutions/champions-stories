@@ -47,37 +47,6 @@ export async function getStory(storySlug: string) {
     return data;
 }
 
-export async function getStoryThumbnail(story: Story) {
-    if (story.thumbnail === null) {
-        console.error("No thumbnail found for story:", story);
-        return;
-    }
-
-    const { data: images, error: imageError } = await supabase
-        .storage
-        .from("stories")
-        .list("thumbnails");
-
-    if (imageError || !images) {
-        console.error("Error fetching image for thumbnail:", imageError);
-        return;
-    }
-
-    const image = images.filter((image) => image.id === story.thumbnail);
-
-    if (image.length === 0) {
-        console.error("No thumbnail found for story:", story.title);
-        return;
-    }
-
-    const { data: { publicUrl } } = supabase
-        .storage
-        .from("stories")
-        .getPublicUrl(`thumbnails/${image[0].name}`);
-
-    return { url: publicUrl } as Thumbnail;
-}
-
 export async function getRecentStories(
     n: number,
 ) {

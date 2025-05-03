@@ -4,9 +4,9 @@ import { Button } from "@app/components/ui/button.tsx";
 import { useNavigate } from "react-router-dom";
 import supabase, {
     getChampionOfStory,
+    getPublicUrl,
     getRecentStories,
     getStory,
-    getStoryThumbnail,
 } from "../utils/supabase.ts";
 import type { Database } from "../../../supabase.types.ts";
 import AboutSection from "@app/components/AboutSection.tsx";
@@ -81,8 +81,8 @@ export default function Home() {
 
     useEffect(() => {
         const handleScroll = () => {
-            const scrollY = window.scrollY;
-            const viewportHeight = window.innerHeight;
+            const scrollY = globalThis.scrollY;
+            const viewportHeight = globalThis.innerHeight;
 
             if (scrollY <= viewportHeight) {
                 const startingOpacity = 0.7;
@@ -93,18 +93,18 @@ export default function Home() {
 
             if (aboutSectionRef.current) {
                 const rect = aboutSectionRef.current.getBoundingClientRect();
-                setIsAboutVisible(rect.top <= window.innerHeight * 0.75);
+                setIsAboutVisible(rect.top <= globalThis.innerHeight * 0.75);
             }
 
             if (storiesSectionRef.current) {
                 const rect = storiesSectionRef.current.getBoundingClientRect();
-                setIsStoriesVisible(rect.top <= window.innerHeight * 0.75);
+                setIsStoriesVisible(rect.top <= globalThis.innerHeight * 0.75);
             }
 
-            cardRefs.current.forEach((cardRef, index) => {
+            cardRefs.current.forEach(cardRef => {
                 if (cardRef) {
                     const rect = cardRef.getBoundingClientRect();
-                    const isVisible = rect.top <= window.innerHeight * 0.85;
+                    const isVisible = rect.top <= globalThis.innerHeight * 0.85;
                     if (isVisible) {
                         cardRef.classList.add("opacity-100", "translate-y-0");
                         cardRef.classList.remove("opacity-0", "translate-y-8");
@@ -115,7 +115,7 @@ export default function Home() {
             // Check "View All" button visibility
             if (viewAllButtonRef.current) {
                 const rect = viewAllButtonRef.current.getBoundingClientRect();
-                const isVisible = rect.top <= window.innerHeight * 0.9;
+                const isVisible = rect.top <= globalThis.innerHeight * 0.9;
                 if (isVisible) {
                     viewAllButtonRef.current.classList.add(
                         "opacity-100",
@@ -130,8 +130,8 @@ export default function Home() {
         };
 
         handleScroll();
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        globalThis.addEventListener("scroll", handleScroll);
+        return () => globalThis.removeEventListener("scroll", handleScroll);
     }, []);
 
     const [currentTitleStyle, setCurrentTitleStyle] = useState(titleStyles[0]);
@@ -159,7 +159,7 @@ export default function Home() {
     }, []);
 
     const [stories, setStories] = useState<Story[]>([]);
-    const [champions, setChampions] = useState<Champion[]>([]);
+    const [_champions, setChampions] = useState<Champion[]>([]);
     const [thumbnails, setThumbnails] = useState<Thumbnail[]>([]);
     const [showThumbnails, setShowThumbnails] = useState(false);
 
@@ -168,18 +168,12 @@ export default function Home() {
             if (stories) {
                 setStories(stories);
 
-                const thumbnailPromises = stories
+                const thumbnails = stories
                     .filter((story) => story.thumbnail !== null)
-                    .map((story) => getStoryThumbnail(story));
-
-                Promise.all(thumbnailPromises).then((thumbnails) => {
-                    setThumbnails(
-                        thumbnails.filter((thumbnail) =>
-                            thumbnail !== null && thumbnail !== undefined
-                        ),
-                    );
-                });
-
+                    .map((story) => ({ url: getPublicUrl(`thumbnails/${story.slug}`) }));
+                
+                setThumbnails(thumbnails);
+                
                 const champions = stories.map((story) =>
                     getChampionOfStory(story.id)
                 );
