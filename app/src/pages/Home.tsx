@@ -4,6 +4,7 @@ import { Button } from "@app/components/ui/button.tsx";
 import { useNavigate } from "react-router-dom";
 import supabase, { getChampionOfStory, getRecentStories, getStory, getStoryThumbnail } from "../utils/supabase.ts";
 import type { Database } from "../../../supabase.types.ts";
+import AboutSection from "@app/components/AboutSection.tsx";
 
 type Champion = Database["public"]["Tables"]["champions"]["Row"];
 type Story = Database["public"]["Tables"]["stories"]["Row"];
@@ -31,7 +32,7 @@ const titleStyles: React.CSSProperties[] = [
 
 export default function Home() {
   const storiesSectionRef = useRef<HTMLElement>(null);
-  const [imageOpacity, setImageOpacity] = useState(0.1);
+  const [imageOpacity, setImageOpacity] = useState(0.7);
   const [isStoriesVisible, setIsStoriesVisible] = useState(false);
   const navigate = useNavigate();
 
@@ -48,7 +49,7 @@ export default function Home() {
         return;
       }
 
-      const startingOpacity = 0.1;
+      const startingOpacity = 0.7;
       const opacity = startingOpacity -
         Math.min(scrollY / viewportHeight, startingOpacity);
       setImageOpacity(opacity);
@@ -127,8 +128,8 @@ export default function Home() {
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-[#F45151]">
           <div
-            className="absolute inset-0 bg-cover bg-center bg-[url(/smiling.jpg)] transition-opacity duration-500"
-            style={{ opacity: imageOpacity }}
+            className="absolute inset-0 bg-cover bg-center bg-[url(/home.jpg)] transition-opacity duration-500"
+            style={{ opacity: imageOpacity * 0.5 }}
           />
         </div>
 
@@ -145,127 +146,31 @@ export default function Home() {
         </div>
       </section>
 
+      <AboutSection />
+
       {/* Stories Section */}
       <section
         ref={storiesSectionRef}
-        className={`min-h-screen bg-white py-20 px-4 transition-all duration-1000 ${
-          isStoriesVisible
-            ? "opacity-100 translate-y-0"
-            : "opacity-0 translate-y-20"
-        }`}
+        className=" bg-white px-4"
       >
         <div className="max-w-6xl mx-auto">
           <h2 className="text-4xl font-bold text-[#F45151] mb-16 text-center">
             Recent Stories
           </h2>
-          {showThumbnails && <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-            {stories.map((story, index) => (
-              <Card
-                key={index}
-                story={story}
-                thumbnail={thumbnails[index]?.url || ""}
-                champion={champions[index]}
-                handleCardClick={handleCardClick}
-              />
-            ))}
-          </div>}
-
-          {!showThumbnails && <p>Sorry. Nothing here!</p>}
-        </div>
-      </section>
-
-      {/* Featured Champions Section */}
-      <section className="min-h-screen bg-[#F45151] py-20 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-white mb-16">
-            Featured Champions
-          </h2>
-          <div className="grid md:grid-cols-2 gap-12">
-            <div className="bg-white/10 p-8 rounded-xl backdrop-blur-sm">
-              <h3 className="text-2xl font-bold text-white mb-4">
-                Monthly Spotlight
-              </h3>
-              <p className="text-white/80 mb-6">
-                Discover the incredible journey of our featured athlete
-              </p>
-              <Button
-                variant="outline"
-                className="text-white border-white hover:bg-white/10"
-              >
-                Meet the Champion
-              </Button>
-            </div>
-            <div className="space-y-8">
-              <div className="bg-white/5 p-6 rounded-lg hover:bg-white/10 transition-colors">
-                <h4 className="text-xl font-semibold text-white">
-                  Upcoming Events
-                </h4>
-                <p className="text-white/80 mt-2">
-                  National Wheelchair Basketball Championship - Dec 2024
-                </p>
-              </div>
-              <div className="bg-white/5 p-6 rounded-lg hover:bg-white/10 transition-colors">
-                <h4 className="text-xl font-semibold text-white">
-                  Recent Achievement
-                </h4>
-                <p className="text-white/80 mt-2">
-                  New world record set in 100m wheelchair sprint
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* About Section */}
-      <section className="min-h-screen bg-white py-20 px-4">
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-[#F45151] mb-8">
-            About Champions Place
-          </h2>
-          <p className="text-xl text-gray-600 mb-12">
-            Champions Place is a unique residential facility serving adults with
-            disabilities. Combining adaptive technology, specialized
-            construction, and on-site caregivers, it empowers residents to live
-            independently while staying connected to a vibrant community.
-          </p>
-          <p className="text-xl text-gray-600 mb-12">
-            The vision for Champions Place began with the parents of Team
-            Titans, a wheelchair sports team in Metro Atlanta, who dreamed of a
-            place where their young athletes could thrive as adults. This dream
-            became a reality, creating a space where stories of resilience,
-            determination, and community come to life.
-          </p>
-          <p className="text-xl text-gray-600">
-            This website celebrates those stories, honors the legacy of Garett
-            Couch, and showcases the incredible connection between Champions
-            Place and Innovation Academy. Join us in supporting this mission and
-            helping to secure another sports wheelchair for these inspiring
-            champions.
-          </p>
-        </div>
-      </section>
-
-      {/* Call to Action Section */}
-      <section className="min-h-screen bg-[#F45151] py-20 px-4 flex items-center justify-center">
-        <div className="max-w-4xl text-center">
-          <h2 className="text-4xl font-bold text-white mb-8">
-            Share Your Story
-          </h2>
-          <p className="text-xl text-white/80 mb-12">
-            Every champion has a story. Help us celebrate the incredible
-            achievements of wheelchair athletes worldwide.
-          </p>
-          <div className="flex justify-center gap-6">
-            <Button className="bg-white text-[#F45151] hover:bg-white/90 px-8 py-6 text-lg">
-              Nominate a Champion
-            </Button>
-            <Button
-              variant="outline"
-              className="border-white text-white hover:bg-white/10 px-8 py-6 text-lg"
-            >
-              Become a Storyteller
-            </Button>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+            {stories.length > 0 ? (
+              stories.map((story, index) => (
+                <Card
+                  key={index}
+                  story={story}
+                  thumbnail={thumbnails[index]?.url || ""}
+                  champion={champions[index]}
+                  handleCardClick={handleCardClick}
+                />
+              ))
+            ) : (
+              <p>Sorry. Nothing here!</p>
+            )}
           </div>
         </div>
       </section>
