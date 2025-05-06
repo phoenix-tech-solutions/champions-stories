@@ -30,14 +30,15 @@ export default function AboutSection() {
                             Born from the dreams of parents supporting the Team
                             Titans — a wheelchair sports team in Metro Atlanta —
                             Champions Place brings a bold vision to life: a
-                            future where disabled athletes thrive in a
-                            nurturing community.
+                            future where disabled athletes thrive in a nurturing
+                            community.
                         </p>
                         <p>
                             This website honors their journey, the memory of
                             Garett Couch, and the powerful partnership between
-                            Champions Place and Innovation Academy. Your support of Champions Place
-                            helps the lives of residents and future residents to come.
+                            Champions Place and Innovation Academy. Your support
+                            of Champions Place helps the lives of residents and
+                            future residents to come.
                         </p>
 
                         <div className="flex items-center gap-3 pt-4 text-black font-semibold">

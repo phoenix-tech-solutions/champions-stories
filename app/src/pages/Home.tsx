@@ -101,7 +101,7 @@ export default function Home() {
                 setIsStoriesVisible(rect.top <= globalThis.innerHeight * 0.75);
             }
 
-            cardRefs.current.forEach(cardRef => {
+            cardRefs.current.forEach((cardRef) => {
                 if (cardRef) {
                     const rect = cardRef.getBoundingClientRect();
                     const isVisible = rect.top <= globalThis.innerHeight * 0.85;
@@ -170,10 +170,12 @@ export default function Home() {
 
                 const thumbnails = stories
                     .filter((story) => story.thumbnail !== null)
-                    .map((story) => ({ url: getPublicUrl(`thumbnails/${story.slug}`) }));
-                
+                    .map((story) => ({
+                        url: getPublicUrl(`thumbnails/${story.slug}`),
+                    }));
+
                 setThumbnails(thumbnails);
-                
+
                 const champions = stories.map((story) =>
                     getChampionOfStory(story.id)
                 );

@@ -10,7 +10,7 @@ export default ({ mode }: UserConfig) => {
     return {
         root: "./app",
         server: {
-            port: 3000
+            port: 3000,
         },
         plugins: [
             react(),
@@ -24,7 +24,7 @@ export default ({ mode }: UserConfig) => {
             alias: {
                 "@": new URL("./src/", import.meta.url).pathname,
             },
-            dedupe: ['react','react-dom'],
+            dedupe: ["react", "react-dom"],
         },
     };
 };

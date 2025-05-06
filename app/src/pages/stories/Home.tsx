@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-getPublicUrl,
+    getPublicUrl,
     getRecentStories,
     getStory,
 } from "../../utils/supabase.ts";
@@ -40,11 +40,12 @@ export default function Home() {
                 setStories(fetchedStories);
 
                 const thumbnails = fetchedStories
-                    .filter(story => story.thumbnail !== null)
-                    .map(story => ({ url: getPublicUrl(`thumbnails/${story.slug}`) }));
-                
-                setThumbnails(thumbnails);
+                    .filter((story) => story.thumbnail !== null)
+                    .map((story) => ({
+                        url: getPublicUrl(`thumbnails/${story.slug}`),
+                    }));
 
+                setThumbnails(thumbnails);
             } catch (error) {
                 console.error("Error fetching stories:", error);
             } finally {
