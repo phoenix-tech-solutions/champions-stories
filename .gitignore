@@ -1,7 +1,6 @@
 # Auto-gen
 .vite
 node_modules
-deno.lock
 
 # Secret
 .env
