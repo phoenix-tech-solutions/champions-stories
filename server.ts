@@ -18,7 +18,7 @@ async function handler(req: Request): Promise<Response> {
 
     // 2. If no file found, serve index.html for SPA routing
     if (res.status === 404) {
-        return await serveFile(req, "./dist/index.html");
+        return await serveFile(req, "./app/dist/index.html");
     }
 
     return res;
