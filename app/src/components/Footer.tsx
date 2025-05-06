@@ -6,7 +6,7 @@ export default function Footer() {
             <div className="max-w-6xl mx-auto text-center">
                 <p className="text-sm">
                     © {new Date().getFullYear()}{" "}
-                    Element 6. All rights reserved. Website developed by{" "}
+                    Element Six. All rights reserved. Website developed by{" "}
                     <a
                         href="https://www.linkedin.com/company/phoenixtechsolutions/"
                         target="_blank"

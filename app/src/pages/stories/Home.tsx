@@ -6,7 +6,7 @@ getPublicUrl,
     getStory,
 } from "../../utils/supabase.ts";
 import type { Database } from "../../../../supabase.types.ts";
-import Header from "../../components/header/Header.tsx";
+import Header from "../../components/Header.tsx";
 import Footer from "@app/components/Footer.tsx";
 
 type Story = Database["public"]["Tables"]["stories"]["Row"];
@@ -152,13 +152,16 @@ export default function Home() {
                                         <img
                                             src={thumbnails[index].url}
                                             alt={`${story.title} thumbnail`}
-                                            className="w-24 h-24 object-cover rounded-lg transition-transform duration-500 hover:scale-110"
+                                            className="w-30 h-30 m-3 object-cover rounded-lg transition-transform duration-500 hover:scale-110"
                                         />
                                     </div>
                                 )}
                                 <div>
                                     <h3 className="text-2xl font-semibold text-[#F45151] pb-1">
                                         {story.title}
+                                    </h3>
+                                    <h3 className="text-md font-bold text-gray-600 pb-1">
+                                        {story.subtitle}
                                     </h3>
                                     <p className="text-gray-600 italic mb-4">
                                         By {story.author}

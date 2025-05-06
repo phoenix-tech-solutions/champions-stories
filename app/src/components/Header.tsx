@@ -25,16 +25,10 @@ export default function Header() {
                         Stories
                     </Link>
                     <Link
-                        to="/#about"
+                        to="/element-six"
                         className="hover:text-white/80 transition-colors"
                     >
-                        About
-                    </Link>
-                    <Link
-                        to="/#contact"
-                        className="hover:text-white/80 transition-colors"
-                    >
-                        Contact
+                        Element Six
                     </Link>
                 </nav>
 

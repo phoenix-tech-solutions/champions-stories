@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import Header from "@app/components/header/Header.tsx";
+import Header from "../../components/Header.tsx";
 import { getPublicUrl, getStory } from "@app/utils/supabase.ts";
 import { Database } from "../../../../supabase.types.ts";
 import { Button } from "@app/components/ui/button.tsx";

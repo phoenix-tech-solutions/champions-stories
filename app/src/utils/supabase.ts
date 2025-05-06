@@ -53,6 +53,7 @@ export async function getRecentStories(
     const query = supabase
         .from("stories")
         .select("*")
+        .not("subtitle", "is", null)
         .order("created_at", { ascending: false })
         .limit(n);
 

@@ -1,7 +1,7 @@
 export default function AboutSection() {
     return (
         <section className="relative bg-white py-24 px-6 overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full opacity-10 bg-[url('/pattern.svg')] bg-repeat z-0" />
+            <div className="absolute top-0 left-0 w-full h-full opacity-10" />
 
             <div className="max-w-7xl mx-auto relative z-10">
                 {/* Centered Heading */}
@@ -30,20 +30,19 @@ export default function AboutSection() {
                             Born from the dreams of parents supporting the Team
                             Titans — a wheelchair sports team in Metro Atlanta —
                             Champions Place brings a bold vision to life: a
-                            future where differently-abled athletes thrive in a
+                            future where disabled athletes thrive in a
                             nurturing community.
                         </p>
                         <p>
                             This website honors their journey, the memory of
                             Garett Couch, and the powerful partnership between
-                            Champions Place and Innovation Academy. Your support
-                            helps fund another wheelchair — and fuels another
-                            dream.
+                            Champions Place and Innovation Academy. Your support of Champions Place
+                            helps the lives of residents and future residents to come.
                         </p>
 
                         <div className="flex items-center gap-3 pt-4 text-black font-semibold">
                             <span className="text-2xl animate-pulse">♥️</span>
-                            <span>Support. Empower. Inspire.</span>
+                            <span>Empower. Engage. Equip.</span>
                         </div>
                     </div>
 

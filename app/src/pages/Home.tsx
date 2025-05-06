@@ -270,10 +270,6 @@ export default function Home() {
                     <h2 className="text-4xl font-bold mb-8">
                         Join the Community
                     </h2>
-                    <p className="text-lg mb-8">
-                        Be part of the journey. Share your stories, connect with
-                        others, and inspire the world.
-                    </p>
 
                     {/* Video Embed */}
                     <div className="mx-auto mb-8 max-w-3xl">
@@ -292,14 +288,24 @@ export default function Home() {
                         </div>
                     </div>
 
-                    <Button asChild>
-                        <a
-                            href="https://www.championscommunityfoundation.org/champions-place"
-                            className="text-black hover:bg-gray-200 text-lg px-12 py-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                        >
-                            Champions Place
-                        </a>
-                    </Button>
+                    <div className="flex flex-row gap-4 align-items-center justify-center">
+                        <Button asChild>
+                            <a
+                                href="https://www.championscommunityfoundation.org/champions-place"
+                                className="text-black hover:bg-gray-200 text-lg px-12 py-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                            >
+                                Champions Place
+                            </a>
+                        </Button>
+                        <Button asChild>
+                            <a
+                                href="/element-six"
+                                className="text-black hover:bg-gray-200 text-lg px-12 py-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                            >
+                                Element Six
+                            </a>
+                        </Button>
+                    </div>
                 </div>
             </section>
 
