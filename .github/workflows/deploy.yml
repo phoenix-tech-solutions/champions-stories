@@ -1,9 +1,9 @@
 name: Deploy
 on:
   push:
-    branches: [main]
+    branches: main
   pull_request:
-    branches: [main]
+    branches: main
 
 jobs:
   deploy:
@@ -27,9 +27,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-
-      - name: Clear Deno Cache
-        run: deno cache --reload .
 
       - name: Install step
         run: "deno install"
