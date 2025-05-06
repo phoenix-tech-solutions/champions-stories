@@ -7,3 +7,6 @@ node_modules
 
 # MacOS stuff
 .DS_Store
+
+# Build
+app/dist
