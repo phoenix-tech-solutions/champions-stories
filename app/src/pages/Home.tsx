@@ -289,12 +289,11 @@ export default function Home() {
                             />
                         </div>
                     </div>
-
-                    <div className="flex flex-row gap-4 align-items-center justify-center">
+                    <div className="flex flex-row gap-4 items-center justify-center mx-auto px-4 max-w-full sm:max-w-[50%]">
                         <Button asChild>
                             <a
                                 href="https://www.championscommunityfoundation.org/champions-place"
-                                className="text-black hover:bg-gray-200 text-lg px-12 py-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                                className="text-black hover:bg-gray-200 text-base sm:text-lg px-6 sm:px-12 py-4 sm:py-6 rounded-lg hover:scale-105 hover:shadow-lg"
                             >
                                 Champions Place
                             </a>
@@ -302,7 +301,7 @@ export default function Home() {
                         <Button asChild>
                             <a
                                 href="/element-six"
-                                className="text-black hover:bg-gray-200 text-lg px-12 py-6 rounded-lg transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                                className="text-black hover:bg-gray-200 text-base sm:text-lg px-6 sm:px-12 py-4 sm:py-6 rounded-lg hover:scale-105 hover:shadow-lg"
                             >
                                 Element Six
                             </a>

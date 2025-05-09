@@ -149,7 +149,7 @@ export default function Story() {
                             By {story.author}
                         </h3>
 
-                        <p
+                        <div
                             ref={contentRef}
                             className="text-lg text-gray-600 leading-relaxed mb-12 whitespace-pre-line opacity-0 translate-y-8 transition-all duration-700 delay-200"
                         >
@@ -161,8 +161,8 @@ export default function Story() {
                 */
                             }
                             {story.body
-                                .split(/(\[img-box\|[\s\S]+?\|img-box\])/g)
-                                .map((segment) => {
+                                .split(/(\[img-box\|[\s\S]+?\|img-box\]|\[[^\]]+\]\([^)]+\)|\*[^*]+\*)/g)
+                                .map((segment, index) => {
                                     // Detect a full [img-box|...|img-box] block
                                     const boxMatch = segment.match(
                                         /^\[img-box\|([\s\S]+?)\|img-box\]$/,
@@ -170,16 +170,18 @@ export default function Story() {
                                     if (boxMatch) {
                                         // Inside a box: extract all image IDs ({{image:X}})
                                         const inner = boxMatch[1];
-                                        const imageIds = [
+                                        const images = [
                                             ...inner.matchAll(
-                                                /{{image:(\d+)}}/g,
+                                                /{{image:(\d+)}}(?:\[caption:([^\]]+)\])?/g,
                                             ),
-                                        ]
-                                            .map((m) => m[1]);
+                                        ].map((m) => ({
+                                            id: m[1],
+                                            caption: m[2] || null,
+                                        }));
 
                                         return (
-                                            <div className="max-w-[75%] mx-auto grid grid-cols-2 gap-4 auto-rows-fr my-6">
-                                                {imageIds.map((id) => (
+                                            <div className="max-w-[75%] mx-auto grid grid-cols-2 gap-4 auto-rows-fr my-6 text-center" key={index}>
+                                                {images.map(({id, caption}) => (
                                                     <div
                                                         key={id}
                                                         className="h-full"
@@ -191,39 +193,76 @@ export default function Story() {
                                                             alt={`Embedded image ${id}`}
                                                             className="w-full h-full object-cover rounded shadow"
                                                         />
+                                                        {caption && (
+                                                            <p className="text-sm text-gray-500 mt-2">{caption}</p>
+                                                        )}
                                                     </div>
                                                 ))}
                                             </div>
                                         );
-                                    } else {
-                                        // Fallback for text + single-image placeholders
-                                        return segment.split(/({{image:\d+}})/g)
-                                            .map((part, i) => {
-                                                const m = part.match(
-                                                    /{{image:(\d+)}}/,
-                                                );
-                                                if (m) {
-                                                    const id = m[1];
-                                                    const publicUrl =
-                                                        getPublicUrl(
-                                                            `embedded/${story.slug}/${id}`,
-                                                        );
-                                                    return (
-                                                        <img
-                                                            key={i}
-                                                            src={publicUrl}
-                                                            alt={`Embedded image ${id}`}
-                                                            className="my-4 mx-auto max-w-[50%] rounded shadow"
-                                                        />
-                                                    );
-                                                }
-                                                return (
-                                                    <span key={i}>{part}</span>
-                                                );
-                                            });
                                     }
+
+                                    // Detect a full [text](link) block
+                                    const linkMatch = segment.match(
+                                        /^\[([^\]]+)\]\(([^\)]+)\)$/,
+                                    );
+                                    if (linkMatch) {
+                                        const text = linkMatch[1];
+                                        const link = linkMatch[2];
+                                        return (
+                                            <a
+                                                key={index}
+                                                href={link}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-[#F45151] underline hover:text-[#d14343] transition-colors"
+                                            >
+                                                {text}
+                                            </a>
+                                        );
+                                    }
+                                    // Detect italicized text
+                                    const italicMatch = segment.match(
+                                        /^\*([\w\s.]+?)\*$/,
+                                    );
+                                    if (italicMatch) {
+                                        const text = italicMatch[1];
+                                        return (
+                                            <i key={index}>{text}</i>
+                                        );
+                                    }
+
+                                // Fallback for text + single-image placeholders
+                                return segment
+                                    .split(/({{image:\d+}}(?:\[caption:[^\]]+\])?)/g)
+                                    .filter(Boolean)
+                                    .map((part, i) => {
+                                      const [, id, caption] =
+                                        part.match(/{{image:(\d+)}}(?:\[caption:([^\]]+)\])?/) || [];
+                                  
+                                      if (id) {
+                                        const src = getPublicUrl(`embedded/${story.slug}/${id}`);
+                                        return (
+                                          <div
+                                            key={`${index}-${i}`}
+                                            className="my-4 mx-auto max-w-[50%] text-center"
+                                          >
+                                            <img
+                                              src={src}
+                                              alt={`Embedded image ${id}`}
+                                              className="rounded shadow"
+                                            />
+                                            {caption && (
+                                              <p className="text-sm text-gray-500 mt-2">{caption}</p>
+                                            )}
+                                          </div>
+                                        );
+                                      }
+                                  
+                                      return <span key={`${index}-${i}`}>{part}</span>;
+                                    });                                  
                                 })}
-                        </p>
+                        </div>
 
                         <div
                             ref={buttonRef}
