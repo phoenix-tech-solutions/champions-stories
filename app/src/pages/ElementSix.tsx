@@ -70,7 +70,7 @@ export default function ElementSix() {
                         stories that would go on to shape his career and a life
                         of writing.
                     </p>
-                    <p className="text-gray-700 mt-16 mb-8">
+                    <p className="text-gray-700 mb-8">
                         In 1888, Chekhov laid out six elements of an effective
                         story; he highlighted objectivity, brevity, and
                         originality among others. For the sixth element, Chekhov

@@ -161,7 +161,9 @@ export default function Story() {
                 */
                             }
                             {story.body
-                                .split(/(\[img-box\|[\s\S]+?\|img-box\]|\[[^\]]+\]\([^)]+\)|\*[^*]+\*)/g)
+                                .split(
+                                    /(\[img-box\|[\s\S]+?\|img-box\]|\[[^\]]+\]\([^)]+\)|\*[^*]+\*)/g,
+                                )
                                 .map((segment, index) => {
                                     // Detect a full [img-box|...|img-box] block
                                     const boxMatch = segment.match(
@@ -180,8 +182,13 @@ export default function Story() {
                                         }));
 
                                         return (
-                                            <div className="max-w-[75%] mx-auto grid grid-cols-2 gap-4 auto-rows-fr my-6 text-center" key={index}>
-                                                {images.map(({id, caption}) => (
+                                            <div
+                                                className="max-w-[75%] mx-auto grid grid-cols-2 gap-4 auto-rows-fr my-6 text-center"
+                                                key={index}
+                                            >
+                                                {images.map((
+                                                    { id, caption },
+                                                ) => (
                                                     <div
                                                         key={id}
                                                         className="h-full"
@@ -194,7 +201,9 @@ export default function Story() {
                                                             className="w-full h-full object-cover rounded shadow"
                                                         />
                                                         {caption && (
-                                                            <p className="text-sm text-gray-500 mt-2">{caption}</p>
+                                                            <p className="text-sm text-gray-500 mt-2">
+                                                                {caption}
+                                                            </p>
                                                         )}
                                                     </div>
                                                 ))}
@@ -227,40 +236,49 @@ export default function Story() {
                                     );
                                     if (italicMatch) {
                                         const text = italicMatch[1];
-                                        return (
-                                            <i key={index}>{text}</i>
-                                        );
+                                        return <i key={index}>{text}</i>;
                                     }
 
-                                // Fallback for text + single-image placeholders
-                                return segment
-                                    .split(/({{image:\d+}}(?:\[caption:[^\]]+\])?)/g)
-                                    .filter(Boolean)
-                                    .map((part, i) => {
-                                      const [, id, caption] =
-                                        part.match(/{{image:(\d+)}}(?:\[caption:([^\]]+)\])?/) || [];
-                                  
-                                      if (id) {
-                                        const src = getPublicUrl(`embedded/${story.slug}/${id}`);
-                                        return (
-                                          <div
-                                            key={`${index}-${i}`}
-                                            className="my-4 mx-auto max-w-[50%] text-center"
-                                          >
-                                            <img
-                                              src={src}
-                                              alt={`Embedded image ${id}`}
-                                              className="rounded shadow"
-                                            />
-                                            {caption && (
-                                              <p className="text-sm text-gray-500 mt-2">{caption}</p>
-                                            )}
-                                          </div>
-                                        );
-                                      }
-                                  
-                                      return <span key={`${index}-${i}`}>{part}</span>;
-                                    });                                  
+                                    // Fallback for text + single-image placeholders
+                                    return segment
+                                        .split(
+                                            /({{image:\d+}}(?:\[caption:[^\]]+\])?)/g,
+                                        )
+                                        .filter(Boolean)
+                                        .map((part, i) => {
+                                            const [, id, caption] = part.match(
+                                                /{{image:(\d+)}}(?:\[caption:([^\]]+)\])?/,
+                                            ) || [];
+
+                                            if (id) {
+                                                const src = getPublicUrl(
+                                                    `embedded/${story.slug}/${id}`,
+                                                );
+                                                return (
+                                                    <div
+                                                        key={`${index}-${i}`}
+                                                        className="my-4 mx-auto max-w-[50%] text-center"
+                                                    >
+                                                        <img
+                                                            src={src}
+                                                            alt={`Embedded image ${id}`}
+                                                            className="rounded shadow"
+                                                        />
+                                                        {caption && (
+                                                            <p className="text-sm text-gray-500 mt-2">
+                                                                {caption}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                );
+                                            }
+
+                                            return (
+                                                <span key={`${index}-${i}`}>
+                                                    {part}
+                                                </span>
+                                            );
+                                        });
                                 })}
                         </div>
 
