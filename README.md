@@ -1,4 +1,4 @@
-# Champions Place Stories
+# Stories of Champions
 
 A digital storytelling platform built with **React + Vite** and powered by **Supabase**, developed by the **Phoenix Tech Solutions** team for the **Element Six Writing class** at Innovation Academy. This site showcases the inspiring stories of the residents at Champions Place, celebrating their journeys and fostering community awareness.
 
