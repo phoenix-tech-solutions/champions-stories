@@ -1,5 +1,7 @@
-import Header from "@app/components/Header.tsx";
-import Footer from "@app/components/Footer.tsx";
+// import Header from "@app/components/Header.tsx";
+import Header from "../components/Header.tsx";
+// import Footer from "@app/components/Footer.tsx";
+import Footer from "../components/Footer.tsx";
 import { useEffect, useRef } from "react";
 
 export default function ElementSix() {

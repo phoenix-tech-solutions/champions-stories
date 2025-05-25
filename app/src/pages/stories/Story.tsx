@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/Header.tsx";
-import { getPublicUrl, getStory } from "@app/utils/supabase.ts";
+// import { getPublicUrl, getStory } from "@app/utils/supabase.ts";
+import { getPublicUrl, getStory } from "../../utils/supabase.ts";
 import { Database } from "../../../../supabase.types.ts";
-import { Button } from "@app/components/ui/button.tsx";
-import Footer from "@app/components/Footer.tsx";
+// import { Button } from "@app/components/ui/button.tsx";
+// import Footer from "@app/components/Footer.tsx";
+import { Button } from "../../components/ui/button.tsx";
+import Footer from "../../components/Footer.tsx";
 
 type Story = Database["public"]["Tables"]["stories"]["Row"];
 
@@ -20,6 +23,32 @@ export default function Story() {
     const subtitleRef = useRef<HTMLHeadingElement>(null);
     const contentRef = useRef<HTMLParagraphElement>(null);
     const buttonRef = useRef<HTMLDivElement>(null);
+
+    // State for maximized image
+    const [maximizedImage, setMaximizedImage] = useState<{
+        src: string;
+        alt: string;
+        caption?: string | null;
+    } | null>(null);
+
+    // Animation state for modal
+    const [showMaximized, setShowMaximized] = useState(false);
+
+    // Animate in when maximizedImage is set
+    useEffect(() => {
+        if (maximizedImage) {
+            // Next tick to trigger CSS transition
+            setTimeout(() => setShowMaximized(true), 10);
+        } else {
+            setShowMaximized(false);
+        }
+    }, [maximizedImage]);
+
+    // Helper to close with animation
+    function closeMaximized() {
+        setShowMaximized(false);
+        setTimeout(() => setMaximizedImage(null), 200);
+    }
 
     useEffect(() => {
         const fetchStory = async () => {
@@ -105,6 +134,66 @@ export default function Story() {
 
     return (
         <>
+            {/* Maximized Image Modal */}
+            {maximizedImage && (
+                <div
+                    className={`fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-90 transition-opacity duration-200 ${
+                        showMaximized ? "opacity-100" : "opacity-0 pointer-events-none"
+                    }`}
+                    onClick={closeMaximized}
+                    style={{ cursor: "default" }}
+                >
+                    <div
+                        className={`relative flex flex-col items-center transition-transform duration-200 ${
+                            showMaximized ? "scale-100" : "scale-90"
+                        }`}
+                        style={{
+                            maxWidth: "80vw",
+                            maxHeight: "80vh",
+                        }}
+                        onClick={e => e.stopPropagation()}
+                    >
+                        {/* Close Button */}
+                        <button
+                            className="absolute top-2 right-2 text-white text-3xl font-bold bg-black bg-opacity-60 rounded-full w-10 h-10 flex items-center justify-center hover:bg-opacity-90 transition"
+                            onClick={closeMaximized}
+                            aria-label="Close"
+                            style={{ zIndex: 10 }}
+                        >
+                            ×
+                        </button>
+                        <img
+                            src={maximizedImage.src}
+                            alt={maximizedImage.alt}
+                            className="object-contain rounded shadow-lg"
+                            style={{
+                                maxWidth: "80vw",
+                                maxHeight: "70vh",
+                                background: "#222",
+                                transition: "transform 0.2s",
+                            }}
+                        />
+                        {maximizedImage.caption && (
+                            <div className="mt-4 text-white text-center text-base bg-black bg-opacity-50 px-4 py-2 rounded">
+                                {maximizedImage.caption}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* Add style for image hover scaling */}
+            <style>
+                {`
+                .story-img-hover {
+                    transition: transform 0.2s;
+                }
+                .story-img-hover:hover {
+                    transform: scale(1.07);
+                }
+                `}
+            </style>
+
             {/* Page load overlay animation */}
             <div
                 className={`fixed inset-0 bg-[#F45151] z-50 transition-opacity duration-700 ${
@@ -198,7 +287,16 @@ export default function Story() {
                                                                 `embedded/${story.slug}/${id}`,
                                                             )}
                                                             alt={`Embedded image ${id}`}
-                                                            className="w-full h-full object-cover rounded shadow"
+                                                            className="w-full h-full object-cover rounded shadow story-img-hover cursor-zoom-in"
+                                                            onClick={() =>
+                                                                setMaximizedImage({
+                                                                    src: getPublicUrl(
+                                                                        `embedded/${story.slug}/${id}`,
+                                                                    ),
+                                                                    alt: `Embedded image ${id}`,
+                                                                    caption,
+                                                                })
+                                                            }
                                                         />
                                                         {caption && (
                                                             <p className="text-sm text-gray-500 mt-2">
@@ -262,7 +360,14 @@ export default function Story() {
                                                         <img
                                                             src={src}
                                                             alt={`Embedded image ${id}`}
-                                                            className="rounded shadow"
+                                                            className="rounded shadow story-img-hover cursor-zoom-in"
+                                                            onClick={() =>
+                                                                setMaximizedImage({
+                                                                    src,
+                                                                    alt: `Embedded image ${id}`,
+                                                                    caption,
+                                                                })
+                                                            }
                                                         />
                                                         {caption && (
                                                             <p className="text-sm text-gray-500 mt-2">

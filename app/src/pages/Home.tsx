@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import Arrow from "/arrow_down.svg";
-import { Button } from "@app/components/ui/button.tsx";
+// import { Button } from "@app/components/ui/button.tsx";
+import { Button } from "../components/ui/button.tsx";
 import { useNavigate } from "react-router-dom";
 import supabase, {
     getChampionOfStory,
@@ -9,8 +10,10 @@ import supabase, {
     getStory,
 } from "../utils/supabase.ts";
 import type { Database } from "../../../supabase.types.ts";
-import AboutSection from "@app/components/AboutSection.tsx";
-import Footer from "@app/components/Footer.tsx";
+// import AboutSection from "@app/components/AboutSection.tsx";
+import AboutSection from "../components/AboutSection.tsx";
+// import Footer from "@app/components/Footer.tsx";
+import Footer from "../components/Footer.tsx";
 
 type Champion = Database["public"]["Tables"]["champions"]["Row"];
 type Story = Database["public"]["Tables"]["stories"]["Row"];

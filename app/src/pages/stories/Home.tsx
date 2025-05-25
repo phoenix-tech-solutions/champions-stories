@@ -7,7 +7,8 @@ import {
 } from "../../utils/supabase.ts";
 import type { Database } from "../../../../supabase.types.ts";
 import Header from "../../components/Header.tsx";
-import Footer from "@app/components/Footer.tsx";
+// import Footer from "@app/components/Footer.tsx";
+import Footer from "../../components/Footer.tsx";
 
 type Story = Database["public"]["Tables"]["stories"]["Row"];
 type Thumbnail = {
