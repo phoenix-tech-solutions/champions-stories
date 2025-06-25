@@ -159,6 +159,16 @@ export default function ElementSix() {
                         />
                     </div>
                 </section>
+                {/* Home Button at the end */}
+                <div className="max-w-4xl mx-auto pb-16 px-4">
+                    <button
+                        type="button"
+                        className="bg-[#F45151] hover:bg-[#d14343] w-full text-white px-8 py-4 rounded hover:shadow-lg transform hover:scale-105 transition-all duration-300 font-semibold text-lg"
+                        onClick={() => globalThis.location.href = "/"}
+                    >
+                        Back to Home
+                    </button>
+                </div>
             </div>
             <Footer />
         </>
