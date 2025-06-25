@@ -3,10 +3,13 @@ import Header from "../components/Header.tsx";
 // import Footer from "@app/components/Footer.tsx";
 import Footer from "../components/Footer.tsx";
 import { useEffect, useRef } from "react";
+import { Button } from "../components/ui/button.tsx";
+import { useNavigate } from "react-router-dom";
 
 export default function ElementSix() {
     const titleRef = useRef<HTMLHeadingElement>(null);
     const subtitleRef = useRef<HTMLHeadingElement>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -159,16 +162,16 @@ export default function ElementSix() {
                         />
                     </div>
                 </section>
-                {/* Home Button at the end */}
-                <div className="max-w-4xl mx-auto pb-16 px-4">
-                    <button
-                        type="button"
-                        className="bg-[#F45151] hover:bg-[#d14343] w-full text-white px-8 py-4 rounded hover:shadow-lg transform hover:scale-105 transition-all duration-300 font-semibold text-lg"
-                        onClick={() => globalThis.location.href = "/"}
-                    >
-                        Back to Home
-                    </button>
-                </div>
+                <Button
+                                className="bg-[#F45151] hover:bg-[#d14343] w-full text-white px-8 py-4 hover:shadow-lg transform hover:scale-105 !duration-300 !transition-all"
+                                onClick={() => {
+                                    document.body.classList.add("opacity-0");
+                                    setTimeout(() => navigate("/story"), 300);
+                                    document.body.classList.remove("opacity-0");
+                                }}
+                            >
+                                Back to Home
+                            </Button>
             </div>
             <Footer />
         </>
