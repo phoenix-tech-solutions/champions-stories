@@ -2,19 +2,18 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/Header.tsx";
 // import { getPublicUrl, getStory } from "@app/utils/supabase.ts";
-import { getPublicUrl, getStory } from "../../utils/supabase.ts";
-import { Database } from "../../../../supabase.types.ts";
+import { getStory } from "../../utils/supabase.ts";
 // import { Button } from "@app/components/ui/button.tsx";
 // import Footer from "@app/components/Footer.tsx";
 import { Button } from "../../components/ui/button.tsx";
 import Footer from "../../components/Footer.tsx";
 
-type Story = Database["public"]["Tables"]["stories"]["Row"];
+type Story = Awaited<ReturnType<typeof getStory>>;
 
 export default function Story() {
     const { selectedStorySlug } = useParams();
     const navigate = useNavigate();
-    const [story, setStory] = useState<Story | null>(null);
+    const [story, setStory] = useState<NonNullable<Story> | null>(null);
     const [loading, setLoading] = useState(true);
     const [isPageLoaded, setIsPageLoaded] = useState(false);
 
@@ -283,16 +282,17 @@ export default function Story() {
                                                         className="h-full"
                                                     >
                                                         <img
-                                                            src={getPublicUrl(
-                                                                `embedded/${story.slug}/${id}`,
-                                                            )}
+                                                            src={story.embeddedUrlsByIndex?.[Number(id)] ?? ""}
                                                             alt={`Embedded image ${id}`}
                                                             className="w-full h-full object-cover rounded shadow story-img-hover cursor-zoom-in"
+                                                            style={{
+                                                                display: story.embeddedUrlsByIndex?.[Number(id)]
+                                                                    ? undefined
+                                                                    : "none",
+                                                            }}
                                                             onClick={() =>
                                                                 setMaximizedImage({
-                                                                    src: getPublicUrl(
-                                                                        `embedded/${story.slug}/${id}`,
-                                                                    ),
+                                                                    src: story.embeddedUrlsByIndex?.[Number(id)] ?? "",
                                                                     alt: `Embedded image ${id}`,
                                                                     caption,
                                                                 })
@@ -349,9 +349,14 @@ export default function Story() {
                                             ) || [];
 
                                             if (id) {
-                                                const src = getPublicUrl(
-                                                    `embedded/${story.slug}/${id}`,
-                                                );
+                                                const src = story.embeddedUrlsByIndex?.[Number(id)] ?? "";
+                                                if (!src) {
+                                                    return (
+                                                        <span key={`${index}-${i}`}>
+                                                            {part}
+                                                        </span>
+                                                    );
+                                                }
                                                 return (
                                                     <div
                                                         key={`${index}-${i}`}

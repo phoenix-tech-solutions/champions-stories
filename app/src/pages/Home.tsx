@@ -3,23 +3,15 @@ import Arrow from "/arrow_down.svg";
 // import { Button } from "@app/components/ui/button.tsx";
 import { Button } from "../components/ui/button.tsx";
 import { useNavigate } from "react-router-dom";
-import supabase, {
-    getChampionOfStory,
-    getPublicUrl,
+import {
     getRecentStories,
-    getStory,
 } from "../utils/supabase.ts";
-import type { Database } from "../../../supabase.types.ts";
 // import AboutSection from "@app/components/AboutSection.tsx";
 import AboutSection from "../components/AboutSection.tsx";
 // import Footer from "@app/components/Footer.tsx";
 import Footer from "../components/Footer.tsx";
 
-type Champion = Database["public"]["Tables"]["champions"]["Row"];
-type Story = Database["public"]["Tables"]["stories"]["Row"];
-type Thumbnail = {
-    url: string;
-};
+type Story = Awaited<ReturnType<typeof getRecentStories>>[number];
 
 const titleVariations = [
     "Legends",
@@ -162,33 +154,12 @@ export default function Home() {
     }, []);
 
     const [stories, setStories] = useState<Story[]>([]);
-    const [_champions, setChampions] = useState<Champion[]>([]);
-    const [thumbnails, setThumbnails] = useState<Thumbnail[]>([]);
     const [showThumbnails, setShowThumbnails] = useState(false);
 
     useEffect(() => {
         getRecentStories(6).then((stories) => {
             if (stories) {
                 setStories(stories);
-
-                const thumbnails = stories
-                    .filter((story) => story.thumbnail !== null)
-                    .map((story) => ({
-                        url: getPublicUrl(`thumbnails/${story.slug}`),
-                    }));
-
-                setThumbnails(thumbnails);
-
-                const champions = stories.map((story) =>
-                    getChampionOfStory(story.id)
-                );
-                Promise.all(champions).then((champions) => {
-                    setChampions(
-                        champions.filter((champion) =>
-                            champion !== null && champion !== undefined
-                        ),
-                    );
-                });
             } else {
                 console.error("Failed to fetch champions");
             }
@@ -342,8 +313,7 @@ export default function Home() {
                                     >
                                         <Card
                                             story={story}
-                                            thumbnail={thumbnails[index]?.url ||
-                                                ""}
+                                            thumbnail={story.thumbnailUrl ?? ""}
                                             handleCardClick={handleCardClick}
                                         />
                                     </div>

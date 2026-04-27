@@ -1,25 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-    getPublicUrl,
     getRecentStories,
-    getStory,
 } from "../../utils/supabase.ts";
-import type { Database } from "../../../../supabase.types.ts";
 import Header from "../../components/Header.tsx";
 // import Footer from "@app/components/Footer.tsx";
 import Footer from "../../components/Footer.tsx";
 
-type Story = Database["public"]["Tables"]["stories"]["Row"];
-type Thumbnail = {
-    url: string;
-};
+type Story = Awaited<ReturnType<typeof getRecentStories>>[number];
 
 export default function Home() {
     const navigate = useNavigate();
     const [stories, setStories] = useState<Story[]>([]);
     const [loading, setLoading] = useState(true);
-    const [thumbnails, setThumbnails] = useState<Thumbnail[]>([]);
     const [isPageLoaded, setIsPageLoaded] = useState(false);
     const storyRefs = useRef<(HTMLDivElement | null)[]>([]);
     const titleRef = useRef<HTMLHeadingElement>(null);
@@ -39,14 +32,6 @@ export default function Home() {
             try {
                 const fetchedStories = await getRecentStories(100);
                 setStories(fetchedStories);
-
-                const thumbnails = fetchedStories
-                    .filter((story) => story.thumbnail !== null)
-                    .map((story) => ({
-                        url: getPublicUrl(`thumbnails/${story.slug}`),
-                    }));
-
-                setThumbnails(thumbnails);
             } catch (error) {
                 console.error("Error fetching stories:", error);
             } finally {
@@ -143,16 +128,16 @@ export default function Home() {
 
                         {stories.map((story, index) => (
                             <div
-                                key={story.id}
+                                key={story._id}
                                 ref={(el) => storyRefs.current[index] = el}
                                 className="mb-8 p-6 border rounded-lg shadow-md cursor-pointer flex items-center opacity-0 translate-y-8 transition-all duration-700 hover:shadow-lg transform hover:scale-[1.01]"
                                 style={{ transitionDelay: `${150 * index}ms` }}
                                 onClick={() => navigate(`/story/${story.slug}`)}
                             >
-                                {thumbnails[index] && (
+                                {story.thumbnailUrl && (
                                     <div className="overflow-hidden rounded-lg mr-4">
                                         <img
-                                            src={thumbnails[index].url}
+                                            src={story.thumbnailUrl}
                                             alt={`${story.title} thumbnail`}
                                             className="w-30 h-30 m-3 object-cover rounded-lg transition-transform duration-500 hover:scale-110"
                                         />

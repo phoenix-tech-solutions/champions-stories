@@ -1,22 +1,45 @@
-# Stories of Champions
+# champions-stories
 
-A digital storytelling platform built with **React + Vite** and powered by **Supabase**, developed by the **Phoenix Tech Solutions** team for the **Element Six Writing class** at Innovation Academy. This site showcases the inspiring stories of the residents at Champions Place, celebrating their journeys and fostering community awareness.
+This repo is a Vite+React frontend backed by a Convex database (public read) and Convex file storage for story thumbnails + embedded images.
 
----
+## Dev environment (Nix + direnv)
 
-## ✨ Project Overview
+- `direnv allow`
+- `nix develop`
 
-Champions Place Stories is a narrative-driven web application designed to amplify the voices of individuals at Champions Place. Through engaging multimedia stories, the platform aims to:
+## Run locally
 
-- Highlight experiences and achievements.
-- Foster a sense of community and belonging.
-- Serve as a resource for inspiration and advocacy.
+- **Start Convex (local deployment)**:
 
----
+```bash
+nix develop -c bunx convex dev
+```
 
-## 🛠️ Tech Stack
+- **Frontend dev server**:
 
-- **Frontend**: [React](https://reactjs.org/) with [Vite](https://vitejs.dev/) for fast development and optimized builds.
-- **Backend**: [Supabase](https://supabase.com/) for authentication, database, and storage solutions.
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/) for utility-first styling (if applicable).
-- **Deployment**: Hosted on [Deno Deploy](https://deno.com/deploy).
+```bash
+nix develop -c bun run dev
+```
+
+## Seed data
+
+Seeds stories from `stories_rows.csv` into Convex:
+
+```bash
+nix develop -c bun run seed /Users/sreysus/Downloads/stories_rows.csv
+```
+
+## Migrate images (Supabase Storage → Convex)
+
+Downloads existing public Supabase Storage objects (thumbnails + embedded images) and uploads them into Convex file storage:
+
+```bash
+nix develop -c bun run migrate:images
+```
+
+## Production build + serve
+
+```bash
+nix develop -c bun run build
+nix develop -c bun run start
+```

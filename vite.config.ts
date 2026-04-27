@@ -1,6 +1,5 @@
 import { loadEnv, UserConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import deno from "@deno/vite-plugin";
 import process from "node:process";
 import tailwindcss from "@tailwindcss/vite";
 
@@ -14,7 +13,6 @@ export default ({ mode }: UserConfig) => {
         },
         plugins: [
             react(),
-            deno(),
             tailwindcss(),
         ],
         optimizeDeps: {

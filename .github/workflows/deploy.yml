@@ -11,29 +11,20 @@ jobs:
         runs-on: ubuntu-latest
 
         permissions:
-            id-token: write # Needed for auth with Deno Deploy
-            contents: read # Needed to clone the repository
+            contents: read
 
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
 
-            - name: Setup Deno
-              uses: denoland/setup-deno@v2
-              with:
-                  deno-version: v2.x
-
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: lts/*
+            - name: Install Nix
+              uses: DeterminateSystems/nix-installer-action@v16
 
             - name: Build application
-              run: deno task build
+              run: nix develop -c bun run build
 
-            - name: Deploy to Deno Deploy
-              uses: denoland/deployctl@v1
-              with:
-                  project: "champions-stories"
-                  entrypoint: "server.ts"
-                  root: "."
+            - name: Deploy to Cloudflare Pages
+              env:
+                  CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+              run: nix develop -c bun run deploy:cf

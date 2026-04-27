@@ -1,12 +1,6 @@
-# Auto-gen
-.vite
+.direnv
+.venv
+__pycache__/
 node_modules
 
-# Secret
-.env
-
-# MacOS stuff
-.DS_Store
-
-# Build
-app/dist
+.env.local
