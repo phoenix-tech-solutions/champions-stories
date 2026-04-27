@@ -3,3 +3,6 @@ name = "champions-stories"
 # Cloudflare Pages deploys this project as static assets from `app/dist`.
 # This file is optional for Pages, but keeps Wrangler usage consistent.
 
+# Used by Cloudflare Pages build detection (Wrangler config BETA).
+pages_build_output_dir = "app/dist"
+
