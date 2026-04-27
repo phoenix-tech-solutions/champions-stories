@@ -1,4 +1,4 @@
-import { ConvexHttpClient } from "convex/browser";
+import { ConvexClient } from "convex/browser";
 import { api } from "../../../convex/_generated/api.js";
 
 const convexUrl = import.meta.env.VITE_CONVEX_URL as string | undefined;
@@ -9,7 +9,7 @@ if (!convexUrl) {
     );
 }
 
-const client = new ConvexHttpClient(convexUrl ?? "http://127.0.0.1:3210");
+const client = new ConvexClient(convexUrl ?? "http://127.0.0.1:3210");
 
 export async function getStory(storySlug: string) {
     return await client.query(api.stories.getBySlug, { slug: storySlug });
@@ -25,3 +25,4 @@ export async function getRecentStories(n: number) {
 export async function getChampionByLegacyId(legacyId: number) {
     return await client.query(api.champions.getByLegacyId, { legacyId });
 }
+

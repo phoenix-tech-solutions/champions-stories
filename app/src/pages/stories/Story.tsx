@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/Header.tsx";
-// import { getPublicUrl, getStory } from "@app/utils/supabase.ts";
-import { getStory } from "../../utils/supabase.ts";
+import { getStory } from "../../utils/convex.ts";
 // import { Button } from "@app/components/ui/button.tsx";
 // import Footer from "@app/components/Footer.tsx";
 import { Button } from "../../components/ui/button.tsx";

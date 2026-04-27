@@ -5,7 +5,7 @@ import { Button } from "../components/ui/button.tsx";
 import { useNavigate } from "react-router-dom";
 import {
     getRecentStories,
-} from "../utils/supabase.ts";
+} from "../utils/convex.ts";
 // import AboutSection from "@app/components/AboutSection.tsx";
 import AboutSection from "../components/AboutSection.tsx";
 // import Footer from "@app/components/Footer.tsx";

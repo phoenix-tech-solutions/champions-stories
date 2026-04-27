@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
     getRecentStories,
-} from "../../utils/supabase.ts";
+} from "../../utils/convex.ts";
 import Header from "../../components/Header.tsx";
 // import Footer from "@app/components/Footer.tsx";
 import Footer from "../../components/Footer.tsx";
