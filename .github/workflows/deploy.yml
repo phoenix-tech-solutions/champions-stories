@@ -6,8 +6,8 @@ on:
         branches: [main]
 
 jobs:
-    deploy:
-        name: Deploy
+    check:
+        name: Check
         runs-on: ubuntu-latest
 
         permissions:
@@ -20,8 +20,40 @@ jobs:
             - name: Install Nix
               uses: DeterminateSystems/nix-installer-action@v16
 
+            - name: Install dependencies
+              run: nix develop -c bun install --frozen-lockfile
+
+            - name: Typecheck
+              run: nix develop -c bun run typecheck
+
             - name: Build application
+              env:
+                  VITE_CONVEX_URL: https://placeholder.convex.cloud
               run: nix develop -c bun run build
+
+    deploy:
+        name: Deploy
+        runs-on: ubuntu-latest
+        needs: check
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+        permissions:
+            contents: read
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Install Nix
+              uses: DeterminateSystems/nix-installer-action@v16
+
+            - name: Install dependencies
+              run: nix develop -c bun install --frozen-lockfile
+
+            - name: Deploy Convex and build production assets
+              env:
+                  CONVEX_DEPLOY_KEY: ${{ secrets.CONVEX_DEPLOY_KEY }}
+              run: nix develop -c bun run deploy:convex:ci
 
             - name: Deploy to Cloudflare Pages
               env:

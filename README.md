@@ -29,17 +29,28 @@ Seeds stories from `stories_rows.csv` into Convex:
 nix develop -c bun run seed /Users/sreysus/Downloads/stories_rows.csv
 ```
 
-## Migrate images (Supabase Storage → Convex)
-
-Downloads existing public Supabase Storage objects (thumbnails + embedded images) and uploads them into Convex file storage:
-
-```bash
-nix develop -c bun run migrate:images
-```
-
 ## Production build + serve
 
 ```bash
 nix develop -c bun run build
 nix develop -c bun run start
 ```
+
+## Deploy
+
+Convex builds the app so `VITE_CONVEX_URL` points at the production deployment:
+
+```bash
+nix develop -c bun run deploy:convex
+nix develop -c bun run deploy:cf
+```
+
+`.env.production` selects the production Convex deployment. Cloudflare Pages deploys to the `main` branch of the `champions-stories` project, which serves `champions-stories.pages.dev`.
+
+In CI, Convex uses `CONVEX_DEPLOY_KEY` instead of the local `.env.production` file.
+
+GitHub Actions expects these production secrets:
+
+- `CONVEX_DEPLOY_KEY`
+- `CLOUDFLARE_API_TOKEN`
+- `CLOUDFLARE_ACCOUNT_ID`

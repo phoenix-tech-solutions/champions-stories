@@ -1,18 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useQuery } from "convex/react";
+import type { FunctionReturnType } from "convex/server";
 import { useNavigate } from "react-router-dom";
-import {
-    getRecentStories,
-} from "../../utils/convex.ts";
 import Header from "../../components/Header.tsx";
-// import Footer from "@app/components/Footer.tsx";
 import Footer from "../../components/Footer.tsx";
+import { api } from "../../../../convex/_generated/api.js";
 
-type Story = Awaited<ReturnType<typeof getRecentStories>>[number];
+type Story = FunctionReturnType<typeof api.stories.listRecent>[number];
 
 export default function Home() {
     const navigate = useNavigate();
-    const [stories, setStories] = useState<Story[]>([]);
-    const [loading, setLoading] = useState(true);
+    const stories = useQuery(api.stories.listRecent, {
+        limit: 100,
+        withSubtitleOnly: true,
+    });
+    const visibleStories: Story[] = stories ?? [];
+    const loading = stories === undefined;
     const [isPageLoaded, setIsPageLoaded] = useState(false);
     const storyRefs = useRef<(HTMLDivElement | null)[]>([]);
     const titleRef = useRef<HTMLHeadingElement>(null);
@@ -27,26 +30,11 @@ export default function Home() {
         return () => clearTimeout(timer);
     }, []);
 
-    useEffect(() => {
-        const fetchStories = async () => {
-            try {
-                const fetchedStories = await getRecentStories(100);
-                setStories(fetchedStories);
-            } catch (error) {
-                console.error("Error fetching stories:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchStories();
-    }, []);
-
     // Setup intersection observer for scroll animations
     useEffect(() => {
         if (!loading) {
             // Initialize refs array to match stories length
-            storyRefs.current = storyRefs.current.slice(0, stories.length);
+            storyRefs.current = storyRefs.current.slice(0, visibleStories.length);
 
             const observer = new IntersectionObserver(
                 (entries) => {
@@ -84,7 +72,7 @@ export default function Home() {
                 });
             };
         }
-    }, [loading, stories]);
+    }, [loading, visibleStories]);
 
     // Loading animation
     if (loading) {
@@ -126,10 +114,12 @@ export default function Home() {
                             Stories
                         </h2>
 
-                        {stories.map((story, index) => (
+                        {visibleStories.map((story, index) => (
                             <div
                                 key={story._id}
-                                ref={(el) => storyRefs.current[index] = el}
+                                ref={(el) => {
+                                    storyRefs.current[index] = el;
+                                }}
                                 className="mb-8 p-6 border rounded-lg shadow-md cursor-pointer flex items-center opacity-0 translate-y-8 transition-all duration-700 hover:shadow-lg transform hover:scale-[1.01]"
                                 style={{ transitionDelay: `${150 * index}ms` }}
                                 onClick={() => navigate(`/story/${story.slug}`)}
@@ -161,7 +151,7 @@ export default function Home() {
                             </div>
                         ))}
 
-                        {stories.length === 0 && (
+                        {visibleStories.length === 0 && (
                             <div className="py-12 text-center opacity-0 animate-fade-in">
                                 <p className="text-gray-500 italic">
                                     No stories found.

@@ -1,17 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import Arrow from "/arrow_down.svg";
-// import { Button } from "@app/components/ui/button.tsx";
+import { useQuery } from "convex/react";
+import type { FunctionReturnType } from "convex/server";
 import { Button } from "../components/ui/button.tsx";
 import { useNavigate } from "react-router-dom";
-import {
-    getRecentStories,
-} from "../utils/convex.ts";
-// import AboutSection from "@app/components/AboutSection.tsx";
 import AboutSection from "../components/AboutSection.tsx";
-// import Footer from "@app/components/Footer.tsx";
 import Footer from "../components/Footer.tsx";
+import { api } from "../../../convex/_generated/api.js";
 
-type Story = Awaited<ReturnType<typeof getRecentStories>>[number];
+type Story = FunctionReturnType<typeof api.stories.listRecent>[number];
 
 const titleVariations = [
     "Legends",
@@ -153,21 +150,10 @@ export default function Home() {
         return () => clearInterval(interval);
     }, []);
 
-    const [stories, setStories] = useState<Story[]>([]);
-    const [showThumbnails, setShowThumbnails] = useState(false);
-
-    useEffect(() => {
-        getRecentStories(6).then((stories) => {
-            if (stories) {
-                setStories(stories);
-            } else {
-                console.error("Failed to fetch champions");
-            }
-        }).catch((error) => {
-            console.error("Error fetching champions:", error);
-        });
-        setShowThumbnails(true);
-    }, []);
+    const stories = useQuery(api.stories.listRecent, {
+        limit: 6,
+        withSubtitleOnly: true,
+    }) ?? [];
 
     useEffect(() => {
         cardRefs.current = cardRefs.current.slice(0, stories.length);
@@ -302,8 +288,9 @@ export default function Home() {
                                 stories.map((story, index) => (
                                     <div
                                         key={index}
-                                        ref={(el) =>
-                                            cardRefs.current[index] = el}
+                                        ref={(el) => {
+                                            cardRefs.current[index] = el;
+                                        }}
                                         className="opacity-0 translate-y-8 transition-all duration-700 delay-100"
                                         style={{
                                             transitionDelay: `${

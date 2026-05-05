@@ -1,19 +1,22 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useQuery } from "convex/react";
+import type { FunctionReturnType } from "convex/server";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Header from "../../components/Header.tsx";
-import { getStory } from "../../utils/convex.ts";
-// import { Button } from "@app/components/ui/button.tsx";
-// import Footer from "@app/components/Footer.tsx";
 import { Button } from "../../components/ui/button.tsx";
 import Footer from "../../components/Footer.tsx";
+import { api } from "../../../../convex/_generated/api.js";
 
-type Story = Awaited<ReturnType<typeof getStory>>;
+type Story = FunctionReturnType<typeof api.stories.getBySlug>;
 
 export default function Story() {
     const { selectedStorySlug } = useParams();
     const navigate = useNavigate();
-    const [story, setStory] = useState<NonNullable<Story> | null>(null);
-    const [loading, setLoading] = useState(true);
+    const story = useQuery(
+        api.stories.getBySlug,
+        selectedStorySlug ? { slug: selectedStorySlug } : "skip",
+    );
+    const loading = story === undefined;
     const [isPageLoaded, setIsPageLoaded] = useState(false);
 
     // Refs for animated elements
@@ -49,34 +52,19 @@ export default function Story() {
     }
 
     useEffect(() => {
-        const fetchStory = async () => {
-            if (!selectedStorySlug) {
-                navigate("/story");
-                return;
-            }
+        if (!selectedStorySlug || story === null) {
+            navigate("/story");
+        }
+    }, [selectedStorySlug, story, navigate]);
 
-            try {
-                const fetchedStory = await getStory(selectedStorySlug);
-                if (!fetchedStory) {
-                    navigate("/story");
-                    return;
-                }
-                setStory(fetchedStory);
-            } catch (error) {
-                console.error("Error fetching story:", error);
-                navigate("/story");
-            } finally {
-                setLoading(false);
-
-                // Short delay to ensure DOM is ready before starting animations
-                setTimeout(() => {
-                    setIsPageLoaded(true);
-                }, 100);
-            }
-        };
-
-        fetchStory();
-    }, [selectedStorySlug, navigate]);
+    useEffect(() => {
+        if (story) {
+            const timer = setTimeout(() => {
+                setIsPageLoaded(true);
+            }, 100);
+            return () => clearTimeout(timer);
+        }
+    }, [story]);
 
     // Setup intersection observer for scroll animations
     useEffect(() => {
