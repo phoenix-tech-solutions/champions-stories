@@ -278,13 +278,13 @@ export default function AdminStories() {
 
     if (!authenticated) {
         return (
-            <main className="flex min-h-screen items-center justify-center bg-neutral-50 text-neutral-950">
+            <main className="flex min-h-screen items-center justify-center bg-stone-50 text-stone-950">
                 <form
-                    className="flex w-full max-w-xs items-center gap-2 border border-neutral-200 bg-white p-2"
+                    className="flex w-full max-w-xs items-center gap-2 rounded-lg border border-stone-200 bg-white p-1.5"
                     onSubmit={login}
                 >
                     <input
-                        className="h-10 min-w-0 flex-1 bg-transparent px-2 text-sm outline-none"
+                        className="h-10 min-w-0 flex-1 rounded-md bg-transparent px-3 text-sm outline-none placeholder:text-stone-300 focus:bg-stone-50"
                         type="password"
                         autoFocus
                         placeholder="Password"
@@ -294,7 +294,7 @@ export default function AdminStories() {
                     <Button
                         type="submit"
                         size="icon"
-                        className="h-10 w-10 rounded-none"
+                        className="h-10 w-10 rounded-md bg-stone-950 text-white hover:bg-stone-800"
                         title="Enter"
                         aria-label="Enter"
                     >
@@ -302,7 +302,7 @@ export default function AdminStories() {
                     </Button>
                 </form>
                 {authError && (
-                    <div className="fixed bottom-4 text-xs text-neutral-500">
+                    <div className="fixed bottom-4 text-xs text-stone-500">
                         {authError}
                     </div>
                 )}
@@ -316,10 +316,10 @@ export default function AdminStories() {
         : "champions-stories.pages.dev/story/...";
 
     return (
-        <main className="min-h-screen bg-neutral-50 text-neutral-950">
+        <main className="min-h-screen bg-stone-50 text-stone-950">
             <div className="grid min-h-screen grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)_180px]">
-                <aside className="border-r border-neutral-200 bg-white">
-                    <div className="flex h-12 items-center gap-1 border-b border-neutral-200 px-2">
+                <aside className="border-r border-stone-200 bg-stone-100/70">
+                    <div className="flex h-12 items-center gap-1 border-b border-stone-200 px-2">
                         <IconButton label="New" onClick={newStory}>
                             <Plus />
                         </IconButton>
@@ -332,10 +332,10 @@ export default function AdminStories() {
                             <button
                                 key={story._id}
                                 type="button"
-                                className={`flex w-full items-center gap-3 border-b border-neutral-100 px-3 py-3 text-left hover:bg-neutral-50 ${
+                                className={`flex w-full items-center gap-3 border-b border-stone-200/70 px-3 py-3 text-left text-stone-700 transition-colors hover:bg-white focus-visible:bg-white ${
                                     story._id === selectedStoryId
-                                        ? "bg-neutral-100"
-                                        : "bg-white"
+                                        ? "bg-white text-stone-950"
+                                        : "bg-transparent"
                                 } ${story.deletedAt ? "opacity-40" : ""}`}
                                 onClick={() => loadStory(story)}
                                 title={story.title}
@@ -343,10 +343,10 @@ export default function AdminStories() {
                                 <span
                                     className={`h-2 w-2 shrink-0 rounded-full ${
                                         story.deletedAt
-                                            ? "bg-neutral-300"
+                                            ? "bg-stone-300"
                                             : (story.status ?? "published") === "published"
                                             ? "bg-[#F45151]"
-                                            : "bg-neutral-300"
+                                            : "bg-stone-300"
                                     }`}
                                 />
                                 <span className="min-w-0 truncate text-sm">
@@ -358,7 +358,7 @@ export default function AdminStories() {
                 </aside>
 
                 <section className="min-w-0">
-                    <div className="sticky top-0 z-20 flex h-12 items-center justify-between border-b border-neutral-200 bg-white px-2">
+                    <div className="sticky top-0 z-20 flex h-12 items-center justify-between border-b border-stone-200 bg-white/95 px-2 backdrop-blur">
                         <div className="flex items-center gap-1">
                             <IconButton label="Save" onClick={save}>
                                 <Save />
@@ -387,22 +387,22 @@ export default function AdminStories() {
                                 </IconButton>
                             )}
                         </div>
-                        <div className="truncate font-mono text-xs text-neutral-500">
+                        <div className="truncate font-mono text-xs text-stone-500">
                             {statusText || urlPreview}
                         </div>
                     </div>
 
                     <div className="mx-auto max-w-5xl px-4 py-5">
-                        <div className="grid gap-3 border border-neutral-200 bg-white p-3 md:grid-cols-[1fr_180px]">
+                        <div className="grid gap-3 rounded-xl border border-stone-200 bg-white p-3 md:grid-cols-[1fr_180px]">
                             <div className="grid gap-2">
                                 <input
-                                    className="h-12 w-full bg-transparent text-3xl font-semibold outline-none placeholder:text-neutral-300"
+                                    className="h-12 w-full rounded-md bg-transparent px-1 text-3xl font-semibold outline-none placeholder:text-stone-300 focus:bg-stone-50"
                                     placeholder="Title"
                                     value={form.title}
                                     onChange={(event) => updateTitle(event.target.value)}
                                 />
                                 <input
-                                    className="h-9 w-full bg-transparent text-sm text-neutral-600 outline-none placeholder:text-neutral-300"
+                                    className="h-9 w-full rounded-md bg-transparent px-1 text-sm text-stone-600 outline-none placeholder:text-stone-300 focus:bg-stone-50"
                                     placeholder="Subtitle"
                                     value={form.subtitle}
                                     onChange={(event) =>
@@ -414,7 +414,7 @@ export default function AdminStories() {
                                 />
                                 <div className="grid gap-2 sm:grid-cols-[1fr_1.4fr]">
                                     <input
-                                        className="h-9 bg-neutral-50 px-3 text-sm outline-none placeholder:text-neutral-300"
+                                        className="h-9 rounded-md bg-stone-50 px-3 text-sm outline-none placeholder:text-stone-300 focus:bg-stone-100"
                                         placeholder="By"
                                         value={form.author}
                                         onChange={(event) =>
@@ -425,7 +425,7 @@ export default function AdminStories() {
                                         }
                                     />
                                     <input
-                                        className="h-9 bg-neutral-50 px-3 font-mono text-xs outline-none placeholder:text-neutral-300"
+                                        className="h-9 rounded-md bg-stone-50 px-3 font-mono text-xs outline-none placeholder:text-stone-300 focus:bg-stone-100"
                                         placeholder="web-address"
                                         value={form.slug}
                                         onChange={(event) => {
@@ -437,7 +437,7 @@ export default function AdminStories() {
                                         }}
                                     />
                                 </div>
-                                <code className="truncate text-xs text-neutral-400">
+                                <code className="truncate text-xs text-stone-400">
                                     {urlPreview}
                                 </code>
                             </div>
@@ -465,9 +465,9 @@ export default function AdminStories() {
                     </div>
                 </section>
 
-                <aside className="hidden border-l border-neutral-200 bg-white lg:block">
-                    <div className="flex h-12 items-center border-b border-neutral-200 px-3">
-                        <FileClock className="h-4 w-4 text-neutral-500" />
+                <aside className="hidden border-l border-stone-200 bg-stone-100/70 lg:block">
+                    <div className="flex h-12 items-center border-b border-stone-200 px-3">
+                        <FileClock className="h-4 w-4 text-stone-500" />
                     </div>
                     <div className="max-h-[calc(100vh-3rem)] overflow-auto">
                         {(versions ?? []).map((version) => (
@@ -482,7 +482,7 @@ export default function AdminStories() {
 
 function ShellCenter({ text }: { text: string }) {
     return (
-        <main className="flex min-h-screen items-center justify-center bg-neutral-50 text-sm text-neutral-500">
+        <main className="flex min-h-screen items-center justify-center bg-stone-50 text-sm text-stone-500">
             {text}
         </main>
     );
@@ -504,10 +504,10 @@ function IconButton({
             type="button"
             variant="ghost"
             size="icon"
-            className={`h-9 w-9 rounded-none ${
+            className={`h-9 w-9 rounded-md transition-colors ${
                 armed
                     ? "bg-[#F45151] text-white hover:bg-[#d14343]"
-                    : "text-neutral-700 hover:bg-neutral-100"
+                    : "text-stone-700 hover:bg-stone-100 focus-visible:bg-stone-100"
             }`}
             title={label}
             aria-label={label}
@@ -530,12 +530,16 @@ function ThumbnailPicker({
     return (
         <button
             type="button"
-            className="flex aspect-square min-h-36 items-center justify-center overflow-hidden border border-dashed border-neutral-300 bg-neutral-50 text-neutral-500"
+            className="flex min-h-36 items-center justify-center overflow-hidden rounded-lg border border-dashed border-stone-300 bg-stone-50 text-stone-500 transition-colors hover:border-stone-400 hover:bg-stone-100 focus-visible:border-stone-500"
             title="Cover"
             onClick={() => inputRef.current?.click()}
         >
             {src ? (
-                <img src={src} alt="Cover" className="h-full w-full object-cover" />
+                <img
+                    src={src}
+                    alt="Cover"
+                    className="max-h-44 w-full object-contain"
+                />
             ) : (
                 <Upload className="h-5 w-5" />
             )}
@@ -556,9 +560,9 @@ function ThumbnailPicker({
 
 function VersionRow({ version }: { version: StoryVersion }) {
     return (
-        <div className="border-b border-neutral-100 px-3 py-2">
-            <div className="truncate text-xs text-neutral-700">{version.action}</div>
-            <div className="font-mono text-[10px] text-neutral-400">
+        <div className="border-b border-stone-200/70 px-3 py-2">
+            <div className="truncate text-xs text-stone-700">{version.action}</div>
+            <div className="font-mono text-[10px] text-stone-400">
                 {new Date(version.createdAt).toLocaleDateString([], {
                     month: "short",
                     day: "numeric",

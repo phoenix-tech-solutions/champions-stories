@@ -24,7 +24,7 @@ function App() {
                         element={
                             <Suspense
                                 fallback={
-                                    <div className="flex min-h-screen items-center justify-center bg-neutral-50 text-neutral-500">
+                                    <div className="flex min-h-screen items-center justify-center bg-stone-50 text-stone-500">
                                         ...
                                     </div>
                                 }

@@ -351,12 +351,12 @@ function Card({ story, thumbnail, handleCardClick }: CardProps) {
         return null;
     }
     return (
-        <div className="bg-white rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300 overflow-hidden h-full">
-            <div className="relative group overflow-hidden rounded-lg">
+        <div className="h-full overflow-hidden rounded-xl border border-stone-200 bg-white transition-all duration-300 hover:border-stone-300">
+            <div className="relative group flex h-64 items-center justify-center overflow-hidden rounded-lg bg-stone-50">
                 <img
                     src={thumbnail}
                     alt={story.title}
-                    className="w-full h-64 object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="max-h-full max-w-full object-contain transition-transform duration-500 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#F45151]/90 to-transparent flex items-end p-6">
                     <div>

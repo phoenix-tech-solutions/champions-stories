@@ -61,7 +61,7 @@ export default function AboutSection() {
                     </div>
 
                     {/* Video Column */}
-                    <div className="rounded-xl overflow-hidden shadow-2xl animate-slideInRight">
+                    <div className="overflow-hidden rounded-xl border border-stone-200 animate-slideInRight">
                         <div className="w-full aspect-video">
                             <iframe
                                 className="w-full h-full"

@@ -258,7 +258,7 @@ export default function Story() {
 
                                         return (
                                             <div
-                                                className="max-w-[75%] mx-auto grid grid-cols-2 gap-4 auto-rows-fr my-6 text-center"
+                                                className="mx-auto my-6 grid max-w-[75%] grid-cols-2 gap-4 text-center"
                                                 key={index}
                                             >
                                                 {images.map((
@@ -266,12 +266,12 @@ export default function Story() {
                                                 ) => (
                                                     <div
                                                         key={id}
-                                                        className="h-full"
+                                                        className="flex min-h-44 items-center justify-center rounded-lg bg-stone-50 p-2"
                                                     >
                                                         <img
                                                             src={story.embeddedUrlsByIndex?.[Number(id)] ?? ""}
                                                             alt={`Embedded image ${id}`}
-                                                            className="w-full h-full object-cover rounded shadow story-img-hover cursor-zoom-in"
+                                                            className="max-h-[420px] w-full rounded-md object-contain story-img-hover cursor-zoom-in"
                                                             style={{
                                                                 display: story.embeddedUrlsByIndex?.[Number(id)]
                                                                     ? undefined

@@ -120,16 +120,16 @@ export default function Home() {
                                 ref={(el) => {
                                     storyRefs.current[index] = el;
                                 }}
-                                className="mb-8 p-6 border rounded-lg shadow-md cursor-pointer flex items-center opacity-0 translate-y-8 transition-all duration-700 hover:shadow-lg transform hover:scale-[1.01]"
+                                className="mb-8 flex cursor-pointer items-center rounded-xl border border-stone-200 bg-white p-6 opacity-0 translate-y-8 transition-all duration-700 hover:border-stone-300 hover:bg-stone-50 transform hover:scale-[1.01]"
                                 style={{ transitionDelay: `${150 * index}ms` }}
                                 onClick={() => navigate(`/story/${story.slug}`)}
                             >
                                 {story.thumbnailUrl && (
-                                    <div className="overflow-hidden rounded-lg mr-4">
+                                    <div className="mr-4 flex h-32 w-32 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-stone-50 p-2">
                                         <img
                                             src={story.thumbnailUrl}
                                             alt={`${story.title} thumbnail`}
-                                            className="w-30 h-30 m-3 object-cover rounded-lg transition-transform duration-500 hover:scale-110"
+                                            className="max-h-full max-w-full rounded-md object-contain transition-transform duration-500 hover:scale-105"
                                         />
                                     </div>
                                 )}

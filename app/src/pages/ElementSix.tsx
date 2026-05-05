@@ -78,7 +78,7 @@ export default function ElementSix() {
 
           <div className="flex justify-center mb-8">
             <img
-              className="w-[50%] h-full object-cover rounded shadow"
+              className="max-h-[420px] w-[50%] rounded-lg object-contain"
               src="/yalta.png"
               title="Yalta, the Black Sea"
             />
@@ -100,7 +100,7 @@ export default function ElementSix() {
 
           <div className="flex justify-center mb-8">
             <img
-              className="w-[50%] h-full object-cover rounded shadow"
+              className="max-h-[420px] w-[50%] rounded-lg object-contain"
               src="/meeting1.png"
               title="Meeting"
             />
@@ -122,7 +122,7 @@ export default function ElementSix() {
 
           <div className="flex justify-center mb-8">
             <img
-              className="w-[50%] h-full object-cover rounded shadow"
+              className="max-h-[420px] w-[50%] rounded-lg object-contain"
               src="/meeting2.png"
               title="Meeting"
             />
@@ -140,7 +140,7 @@ export default function ElementSix() {
 
           <div className="flex justify-center mb-8">
             <img
-              className="w-[50%] h-full object-cover rounded shadow"
+              className="max-h-[420px] w-[50%] rounded-lg object-contain"
               src="/meeting3.png"
               title="Meeting"
             />

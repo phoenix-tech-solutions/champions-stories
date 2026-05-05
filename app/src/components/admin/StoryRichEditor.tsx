@@ -121,8 +121,8 @@ export function StoryRichEditor({
                 editor={editor}
                 onValueChange={({ value }) => onChange(value as Value)}
             >
-                <div className="border border-neutral-200 bg-white">
-                    <div className="flex h-10 items-center gap-1 border-b border-neutral-200 px-2">
+                <div className="overflow-hidden rounded-xl border border-stone-200 bg-white">
+                    <div className="flex h-10 items-center gap-1 border-b border-stone-200 bg-stone-50 px-2">
                         <ToolbarIcon
                             title="Bold"
                             onClick={() => editor.tf.bold.toggle()}
@@ -169,7 +169,7 @@ export function StoryRichEditor({
                         </ToolbarIcon>
                     </div>
                     <PlateContent
-                        className="min-h-[520px] px-8 py-7 text-[17px] leading-8 text-neutral-900 outline-none"
+                        className="min-h-[520px] px-8 py-7 text-[17px] leading-8 text-stone-900 outline-none selection:bg-[#F45151]/20"
                         placeholder="Write here..."
                     />
                 </div>
@@ -192,7 +192,7 @@ function ToolbarIcon({
             type="button"
             variant="ghost"
             size="icon"
-            className="h-8 w-8 rounded-none text-neutral-700 hover:bg-neutral-100"
+            className="h-8 w-8 rounded-md text-stone-700 transition-colors hover:bg-stone-200/70 focus-visible:bg-stone-200/70"
             title={title}
             aria-label={title}
             onMouseDown={(event) => event.preventDefault()}
@@ -204,7 +204,7 @@ function ToolbarIcon({
 }
 
 function Divider() {
-    return <div className="mx-1 h-5 w-px bg-neutral-200" />;
+    return <div className="mx-1 h-5 w-px bg-stone-200" />;
 }
 
 function H1Element(props: PlateElementProps) {
@@ -241,7 +241,7 @@ function BlockquoteElement(props: PlateElementProps) {
     return (
         <PlateElement
             as="blockquote"
-            className="my-5 border-l-2 border-neutral-300 pl-4 text-neutral-600"
+            className="my-5 border-l-2 border-stone-300 pl-4 text-stone-600"
             {...props}
         />
     );
@@ -261,7 +261,7 @@ function StoryImageElement(props: PlateElementProps) {
     return (
         <PlateElement as="figure" className="my-7" {...props}>
             <div
-                className="border border-neutral-200 bg-neutral-50 p-3"
+                className="rounded-lg border border-stone-200 bg-stone-50 p-3"
                 contentEditable={false}
             >
                 <ImageUploadSurface
@@ -270,7 +270,7 @@ function StoryImageElement(props: PlateElementProps) {
                     onFile={(file) => media?.onUploadImage(element.imageIndex, file)}
                 />
                 <input
-                    className="mt-2 w-full bg-transparent px-1 text-center text-sm text-neutral-600 outline-none placeholder:text-neutral-400"
+                    className="mt-2 w-full rounded-md bg-transparent px-2 py-1 text-center text-sm text-stone-600 outline-none placeholder:text-stone-400 focus:bg-white"
                     value={element.caption ?? ""}
                     placeholder="Caption"
                     onChange={(event) => setCaption(event.target.value)}
@@ -298,7 +298,7 @@ function StoryImageRowElement(props: PlateElementProps) {
     return (
         <PlateElement as="div" className="my-7" {...props}>
             <div
-                className="grid grid-cols-1 gap-3 border border-neutral-200 bg-neutral-50 p-3 sm:grid-cols-2"
+                className="grid grid-cols-1 gap-3 rounded-lg border border-stone-200 bg-stone-50 p-3 sm:grid-cols-2"
                 contentEditable={false}
             >
                 {items.map((item, index) => (
@@ -311,7 +311,7 @@ function StoryImageRowElement(props: PlateElementProps) {
                             }
                         />
                         <input
-                            className="mt-2 w-full bg-transparent px-1 text-center text-sm text-neutral-600 outline-none placeholder:text-neutral-400"
+                            className="mt-2 w-full rounded-md bg-transparent px-2 py-1 text-center text-sm text-stone-600 outline-none placeholder:text-stone-400 focus:bg-white"
                             value={item.caption ?? ""}
                             placeholder="Caption"
                             onChange={(event) =>
@@ -343,7 +343,7 @@ function ImageUploadSurface({
     return (
         <button
             type="button"
-            className="group flex aspect-[4/3] w-full items-center justify-center overflow-hidden border border-dashed border-neutral-300 bg-white text-neutral-500"
+            className="group flex min-h-44 w-full items-center justify-center overflow-hidden rounded-md border border-dashed border-stone-300 bg-white text-stone-500 transition-colors hover:border-stone-400 hover:bg-stone-100 focus-visible:border-stone-500"
             title={title}
             onClick={() => inputRef.current?.click()}
         >
@@ -351,7 +351,7 @@ function ImageUploadSurface({
                 <img
                     src={src}
                     alt={title}
-                    className="h-full w-full object-cover"
+                    className="max-h-[420px] w-full object-contain"
                 />
             ) : (
                 <Upload className="h-5 w-5" />
