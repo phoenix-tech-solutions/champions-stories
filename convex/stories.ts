@@ -1,5 +1,10 @@
 import { query } from "./_generated/server";
 import { v } from "convex/values";
+import type { Doc } from "./_generated/dataModel";
+
+function isPublicStory(story: Doc<"stories">) {
+    return !story.deletedAt && story.status !== "draft";
+}
 
 export const getBySlug = query({
     args: { slug: v.string() },
@@ -10,6 +15,7 @@ export const getBySlug = query({
             .unique();
 
         if (!story) return null;
+        if (!isPublicStory(story)) return null;
 
         const thumbnailUrl = story.thumbnailFileId
             ? await ctx.storage.getUrl(story.thumbnailFileId)
@@ -41,9 +47,12 @@ export const listRecent = query({
             .query("stories")
             .withIndex("by_createdAt")
             .order("desc")
-            .take(boundedLimit);
+            .take(boundedLimit * 2);
 
-        const filtered = withSubtitleOnly ? rows.filter((s) => s.subtitle) : rows;
+        const filtered = rows
+            .filter(isPublicStory)
+            .filter((s) => !withSubtitleOnly || s.subtitle)
+            .slice(0, boundedLimit);
 
         const withUrls = await Promise.all(
             filtered.map(async (story) => {

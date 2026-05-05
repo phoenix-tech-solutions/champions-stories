@@ -8,8 +8,8 @@
  * @module
  */
 
+import type * as adminStories from "../adminStories.js";
 import type * as champions from "../champions.js";
-import type * as images from "../images.js";
 import type * as seed from "../seed.js";
 import type * as stories from "../stories.js";
 
@@ -20,8 +20,8 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  adminStories: typeof adminStories;
   champions: typeof champions;
-  images: typeof images;
   seed: typeof seed;
   stories: typeof stories;
 }>;

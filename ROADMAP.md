@@ -9,7 +9,8 @@
 ## Manual Story Editing
 
 - Add an admin-only story editor for creating, editing, publishing, unpublishing, and deleting stories.
-- Use a simple shared admin password for the first version, checked only inside Convex mutations against a secret stored in Convex environment variables.
+- Use Plate for the first editing UI so ELA students edit the story visually instead of touching markup tokens.
+- Use a simple shared admin password for the first version, checked only inside Convex queries and mutations against a secret stored in Convex environment variables.
 - Store delete backups for 30 days before permanent removal.
 - Prefer soft deletes first: add `deletedAt`, `deletedBy`, and `deleteReason` fields, then hide deleted stories from public queries.
 - Add a scheduled cleanup after backups and restore flows are proven.
