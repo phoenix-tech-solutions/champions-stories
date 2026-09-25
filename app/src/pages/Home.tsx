@@ -372,7 +372,7 @@ function Card({ story, thumbnail, handleCardClick }: CardProps) {
 
                 <button
                     type="button"
-                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-4 py-2 shadow-sm text-white hover:bg-[#d14343] w-full border-2 border-[#F45151] hover:border-[#F45151] transition-all"
+                    className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium h-9 px-4 py-2 shadow-sm bg-[#F45151] text-white hover:bg-[#d14343] w-full border-2 border-[#F45151] hover:border-[#F45151] transition-all"
                     onClick={handleCardClick.bind(null, story)}
                 >
                     Read Full Story
