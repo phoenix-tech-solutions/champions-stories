@@ -199,7 +199,7 @@ export default function Story() {
                 <div className="p-4">
                     <Link
                         to="/story"
-                        className="inline-flex text-black items-center px-4 py-2 bg-transparent border rounded hover:border-[#d14343] hover:underline transition-all duration-100"
+                        className="inline-flex text-black items-center px-4 py-2 bg-transparent border rounded-lg hover:bg-gray-200 hover:border-[#d14343] hover:underline transform transition-all duration-300 hover:scale-105 hover:shadow-lg"
                     >
                         ← Back
                     </Link>
@@ -258,7 +258,7 @@ export default function Story() {
 
                                         return (
                                             <div
-                                                className="mx-auto my-6 grid max-w-[75%] grid-cols-2 gap-4 text-center"
+                                                className="mx-auto my-6 grid w-full max-w-full grid-cols-1 gap-4 text-center sm:max-w-[75%] sm:grid-cols-2"
                                                 key={index}
                                             >
                                                 {images.map((
@@ -266,12 +266,12 @@ export default function Story() {
                                                 ) => (
                                                     <div
                                                         key={id}
-                                                        className="flex min-h-44 items-center justify-center rounded-lg bg-stone-50 p-2"
+                                                        className="flex min-h-44 min-w-0 flex-col items-center justify-center rounded-lg bg-stone-50 p-2"
                                                     >
                                                         <img
                                                             src={story.embeddedUrlsByIndex?.[Number(id)] ?? ""}
                                                             alt={`Embedded image ${id}`}
-                                                            className="max-h-[420px] w-full rounded-md object-contain story-img-hover cursor-zoom-in"
+                                                            className="max-h-[420px] max-w-full rounded-md object-contain story-img-hover cursor-zoom-in"
                                                             style={{
                                                                 display: story.embeddedUrlsByIndex?.[Number(id)]
                                                                     ? undefined
@@ -286,7 +286,7 @@ export default function Story() {
                                                             }
                                                         />
                                                         {caption && (
-                                                            <p className="text-sm text-gray-500 mt-2">
+                                                            <p className="mt-2 max-w-full break-words text-sm text-gray-500">
                                                                 {caption}
                                                             </p>
                                                         )}
@@ -347,12 +347,12 @@ export default function Story() {
                                                 return (
                                                     <div
                                                         key={`${index}-${i}`}
-                                                        className="my-4 mx-auto max-w-[50%] text-center"
+                                                        className="my-4 mx-auto w-full max-w-[50%] text-center"
                                                     >
                                                         <img
                                                             src={src}
                                                             alt={`Embedded image ${id}`}
-                                                            className="rounded shadow story-img-hover cursor-zoom-in"
+                                                            className="max-h-[420px] max-w-full rounded object-contain shadow story-img-hover cursor-zoom-in"
                                                             onClick={() =>
                                                                 setMaximizedImage({
                                                                     src,
@@ -362,7 +362,7 @@ export default function Story() {
                                                             }
                                                         />
                                                         {caption && (
-                                                            <p className="text-sm text-gray-500 mt-2">
+                                                            <p className="mt-2 max-w-full break-words text-sm text-gray-500">
                                                                 {caption}
                                                             </p>
                                                         )}
